@@ -5,7 +5,8 @@ CREATE TABLE "drops" (
 	"password" text,
 	"views" integer DEFAULT 0 NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"expires_at" timestamp with time zone NOT NULL
+	"expires_at" timestamp with time zone NOT NULL,
+	CONSTRAINT "drops_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
 CREATE TABLE "files" (

@@ -1,0 +1,38 @@
+# Git and IDE related files
+.git
+.gitignore
+.gitmodules
+.DS_Store
+.vscode
+.idea
+*.swp
+*.bak
+
+# Build artifacts and temporary files
+node_modules/
+/.next/
+/out/
+dist/
+build/
+*.log
+*.tmp
+tmp/
+uploads/
+
+# Dependency management caches
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment specific files
+.env
+.env.*
+example.env
+
+# Sensitive files
+*.pem
+*.key
+*.crt
+*.pfx
+*.jks
+*.sqlite3
+*.db

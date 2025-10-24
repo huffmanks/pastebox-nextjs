@@ -31,7 +31,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 
 export default function Form() {
-  const [noteValue, setNoteValue] = useState("");
+  const [content, setContent] = useState("");
   const [slug, setSlug] = useState("");
   const [password, setPassword] = useState("");
   const [isProtected, setIsProtected] = useState(false);
@@ -60,24 +60,26 @@ export default function Form() {
       const form = e.currentTarget as HTMLFormElement;
       const formData = new FormData(form);
 
-      if (noteValue) {
-        formData.append("note", noteValue);
+      if (content) {
+        formData.append("content", content);
       }
 
-      if (!slug) {
-        formData.append("slug", generateSlug());
-      } else {
-        formData.set("slug", slugify(slug, slugOptions));
-      }
+      const generatedSlug = slug ? slugify(slug, slugOptions) : generateSlug();
+      formData.set("slug", generatedSlug);
 
-      files.forEach((file) => formData.append("files", file));
+      if (files?.length) {
+        files.forEach((file) => formData.append("files", file));
+      }
 
       const res = await fetch("/api/drop", {
         method: "POST",
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Upload failed");
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Upload failed: ${text}`);
+      }
 
       const data = await res.json();
       setResult(data);
@@ -109,7 +111,7 @@ export default function Form() {
           <div>
             <Field className="gap-1.5">
               <FieldLabel htmlFor="content">Note</FieldLabel>
-              <Editor setNoteValue={setNoteValue} />
+              <Editor setContent={setContent} />
             </Field>
           </div>
           <div className="flex flex-col gap-6">

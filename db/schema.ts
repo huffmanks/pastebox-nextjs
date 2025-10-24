@@ -2,7 +2,7 @@ import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const drops = pgTable("drops", {
   id: uuid("id").primaryKey().defaultRandom(),
-  slug: text("slug").notNull(),
+  slug: text("slug").notNull().unique(),
   content: text("content"),
   password: text("password"),
   views: integer("views").default(0).notNull(),

@@ -24,13 +24,13 @@ export function Editor({
   editorSerializedState,
   onChange,
   onSerializedChange,
-  setNoteValue,
+  setContent,
 }: {
   editorState?: EditorState;
   editorSerializedState?: SerializedEditorState;
   onChange?: (editorState: EditorState) => void;
   onSerializedChange?: (editorSerializedState: SerializedEditorState) => void;
-  setNoteValue?: (editorState: string) => void;
+  setContent?: (editorState: string) => void;
 }) {
   return (
     <div className="bg-background overflow-hidden rounded-lg border shadow">
@@ -51,7 +51,7 @@ export function Editor({
                 const editorStateJSON = editorState.toJSON();
 
                 onSerializedChange?.(editorStateJSON);
-                setNoteValue?.(JSON.stringify(editorStateJSON));
+                setContent?.(JSON.stringify(editorStateJSON));
               }}
             />
           </Field>
