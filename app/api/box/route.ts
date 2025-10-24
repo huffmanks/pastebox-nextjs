@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import { db } from "@/db";
-import { drops, files } from "@/db/schema";
+import { boxes, files } from "@/db/schema";
 import { EXPIRY_TIME } from "@/lib/constants";
 import { getFormString } from "@/lib/get-form-string";
 
@@ -22,48 +22,50 @@ export async function POST(request: Request) {
 
     const slug = getFormString("slug", formData);
 
-    if (!slug || typeof slug !== "string") return new Response("Missing slug", { status: 400 });
+    if (!slug || typeof slug !== "string") return new Response("Missing slug.", { status: 400 });
 
-    const existing = await db.select().from(drops).where(eq(drops.slug, slug)).limit(1);
+    const existing = await db.select().from(boxes).where(eq(boxes.slug, slug)).limit(1);
 
     if (existing.length > 0) {
-      return new Response("Slug already exists", { status: 409 });
+      return new Response("Slug already exists.", { status: 409 });
     }
 
     const content = getFormString("content", formData);
     const password = getFormString("password", formData);
+    const isProtected = Boolean(formData.get("isProtected"));
     const uploadedFiles = formData.getAll("files").filter((f): f is File => f instanceof File);
 
     if (!content && uploadedFiles.length === 0) {
-      return new Response("Must provide content or at least one file", { status: 400 });
+      return new Response("Must provide a note or at least one file.", { status: 400 });
     }
 
-    const [createdDrop] = await db
-      .insert(drops)
+    const [createdBox] = await db
+      .insert(boxes)
       .values({
         slug,
         content,
-        password,
+        password: isProtected ? password : null,
+        isProtected,
         expiresAt,
       })
-      .returning({ id: drops.id, expiresAt: drops.expiresAt });
+      .returning({ id: boxes.id, expiresAt: boxes.expiresAt });
 
-    if (!createdDrop) {
-      return new Response("Failed to create drop", { status: 500 });
+    if (!createdBox) {
+      return new Response("Failed to create box.", { status: 500 });
     }
-    const dropId = createdDrop.id;
+    const boxId = createdBox.id;
 
     if (uploadedFiles.length > 0) {
       await Promise.all(
         uploadedFiles.map(async (file: any) => {
           const fileName = file.name || "unnamed";
-          const filePath = path.join(UPLOAD_DIR, `${dropId}_${fileName}`);
+          const filePath = path.join(UPLOAD_DIR, `${boxId}_${fileName}`);
           const buffer = Buffer.from(await file.arrayBuffer());
 
           await fs.writeFile(filePath, buffer);
 
           await db.insert(files).values({
-            dropId,
+            boxId,
             filePath,
             mimeType: file.type || file.mimeType || "application/octet-stream",
             size: file.size,
@@ -73,9 +75,8 @@ export async function POST(request: Request) {
       );
     }
 
-    return Response.json(createdDrop);
+    return Response.json(createdBox);
   } catch (error) {
-    console.error(error);
     return new Response("There was an error!", {
       status: 400,
     });

@@ -1,11 +1,11 @@
 {
-  "id": "2ff1644d-f9ce-463b-9c22-12abaaf6e3ed",
+  "id": "a8f4cd94-f9af-4024-a9cf-fd9ee66a1712",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.drops": {
-      "name": "drops",
+    "public.boxes": {
+      "name": "boxes",
       "schema": "",
       "columns": {
         "id": {
@@ -33,12 +33,12 @@
           "primaryKey": false,
           "notNull": false
         },
-        "views": {
-          "name": "views",
-          "type": "integer",
+        "is_protected": {
+          "name": "is_protected",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true,
-          "default": 0
+          "default": false
         },
         "created_at": {
           "name": "created_at",
@@ -58,8 +58,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "drops_slug_unique": {
-          "name": "drops_slug_unique",
+        "boxes_slug_unique": {
+          "name": "boxes_slug_unique",
           "nullsNotDistinct": false,
           "columns": [
             "slug"
@@ -81,8 +81,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "drop_id": {
-          "name": "drop_id",
+        "box_id": {
+          "name": "box_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -121,12 +121,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "files_drop_id_drops_id_fk": {
-          "name": "files_drop_id_drops_id_fk",
+        "files_box_id_boxes_id_fk": {
+          "name": "files_box_id_boxes_id_fk",
           "tableFrom": "files",
-          "tableTo": "drops",
+          "tableTo": "boxes",
           "columnsFrom": [
-            "drop_id"
+            "box_id"
           ],
           "columnsTo": [
             "id"
