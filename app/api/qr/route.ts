@@ -4,18 +4,28 @@ import QRCode from "qrcode";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const boxLink = searchParams.get("box_link");
+  const boxUrl = searchParams.get("box_url");
 
-  if (!boxLink) {
+  if (!boxUrl) {
     return new Response("Failed to create QR code.", { status: 500 });
   }
 
-  const svg = await QRCode.toString(boxLink, {
+  const darkScheme = { dark: "#fafafa", light: "#0000" };
+  const lightScheme = { dark: "#000000", light: "#0000" };
+
+  const darkSvg = await QRCode.toString(boxUrl, {
     type: "svg",
-    color: { dark: "#fafafa", light: "#0000" },
+    margin: 2,
+    color: darkScheme,
   });
 
-  return new Response(svg, {
-    headers: { "Content-Type": "image/svg+xml" },
+  const lightSvg = await QRCode.toString(boxUrl, {
+    type: "svg",
+    margin: 2,
+    color: lightScheme,
+  });
+
+  return new Response(JSON.stringify({ lightSvg, darkSvg }), {
+    headers: { "Content-Type": "application/json" },
   });
 }

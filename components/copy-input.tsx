@@ -11,12 +11,12 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 
-export default function CopyInput({ link }: { link: string }) {
+export default function CopyInput({ url }: { url: string }) {
   const [isCopying, setIsCopying] = useState(false);
 
   async function copyToClipboard() {
     setIsCopying(true);
-    await navigator.clipboard.writeText(link);
+    await navigator.clipboard.writeText(url);
 
     setTimeout(() => setIsCopying(false), 2000);
   }
@@ -25,7 +25,7 @@ export default function CopyInput({ link }: { link: string }) {
     <InputGroup className="mb-8">
       <InputGroupInput
         readOnly
-        value={link}
+        value={url}
         onFocus={(e) => e.target.select()}
       />
 

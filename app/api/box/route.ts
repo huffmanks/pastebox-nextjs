@@ -48,7 +48,7 @@ export async function POST(request: Request) {
         isProtected,
         expiresAt,
       })
-      .returning({ id: boxes.id, expiresAt: boxes.expiresAt });
+      .returning({ id: boxes.id, slug: boxes.slug, expiresAt: boxes.expiresAt });
 
     if (!createdBox) {
       return new Response("Failed to create box.", { status: 500 });

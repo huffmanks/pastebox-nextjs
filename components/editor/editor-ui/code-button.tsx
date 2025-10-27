@@ -8,6 +8,10 @@ import {
   type LexicalEditor,
 } from "lexical";
 import { CircleCheckIcon, CopyIcon } from "lucide-react";
+import { toast } from "sonner";
+
+import { useCopy } from "@/hooks/use-copy";
+import { castError } from "@/lib/utils";
 
 import { useDebounce } from "@/components/editor/editor-hooks/use-debounce";
 
@@ -18,6 +22,7 @@ interface Props {
 
 export function CopyButton({ editor, getCodeDOMNode }: Props) {
   const [isCopyCompleted, setCopyCompleted] = useState<boolean>(false);
+  const [copiedText, copy] = useCopy();
 
   const removeSuccessIcon = useDebounce(() => {
     setCopyCompleted(false);
@@ -44,11 +49,15 @@ export function CopyButton({ editor, getCodeDOMNode }: Props) {
     });
 
     try {
-      await navigator.clipboard.writeText(content);
+      await copy(content);
+
+      if (!copiedText) return;
+
       setCopyCompleted(true);
       removeSuccessIcon();
-    } catch (err) {
-      console.error("Failed to copy: ", err);
+    } catch (error) {
+      castError(error);
+      toast.error("Copying failed.");
     }
   }
 

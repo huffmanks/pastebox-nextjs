@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { slugOptions } from "@/lib/constants";
+import { castError } from "@/lib/utils";
 
 import { Editor } from "@/components/editor/blocks/editor";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,12 @@ import {
 } from "@/components/ui/input-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
+
+type ResponseData = {
+  id: string;
+  slug: string;
+  expiresAt: string;
+};
 
 export default function Form() {
   const formSchema = z.object({
@@ -100,10 +107,11 @@ export default function Form() {
         return;
       }
 
-      const data = await res.json();
+      const data: ResponseData = await res.json();
+
       router.push(`/results/${data.slug}`);
-    } catch (err) {
-      console.error("Upload failed:", err);
+    } catch (error) {
+      castError(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -113,6 +121,7 @@ export default function Form() {
     <div className="w-full">
       <form
         className="grid grid-cols-1 gap-8 md:grid-cols-[3fr_1.25fr]"
+        autoComplete="off"
         onSubmit={handleSubmit}>
         <div>
           <Field
@@ -133,6 +142,7 @@ export default function Form() {
                 <InputGroupInput
                   id="slug"
                   name="slug"
+                  autoComplete="off"
                   type="text"
                   value={formState.slug}
                   placeholder="huge-scrawny-sugar"
@@ -190,8 +200,8 @@ export default function Form() {
               <Field className="gap-1.5">
                 <InputGroupInput
                   disabled={!formState.isProtected}
-                  id="password"
                   name="password"
+                  autoComplete="off"
                   type={formState.showPassword ? "text" : "password"}
                   value={formState.password}
                   placeholder="Enter a password"
