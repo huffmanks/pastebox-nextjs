@@ -1,9 +1,9 @@
 services:
   app:
-    build: .
+    image: pastebox
     container_name: pastebox_app
     ports:
-      - "5174:5174"
+      - "3000:3000"
     volumes:
       - ./uploads:/app/uploads
     env_file:
@@ -11,7 +11,8 @@ services:
     environment:
       - NODE_ENV=production
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - pastebox_net
@@ -30,6 +31,12 @@ services:
       - pastebox_pgdata_prod:/var/lib/postgresql/data
     networks:
       - pastebox_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d pastebox"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
 networks:
   pastebox_net:

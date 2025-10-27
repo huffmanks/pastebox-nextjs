@@ -13,9 +13,7 @@ export default function Header() {
   const pathname = usePathname();
 
   function handleCreateNew() {
-    if (pathname === "/") {
-      router.refresh();
-    } else {
+    if (pathname !== "/") {
       router.push("/");
     }
   }

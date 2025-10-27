@@ -9,6 +9,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=user
       - POSTGRES_DB=pastebox
+      - POSTGRES_HOST=localhost
     volumes:
       - pastebox_pgdata_dev:/var/lib/postgresql/data
 
