@@ -10,8 +10,8 @@ import {
 } from "lexical";
 import { BoldIcon, ItalicIcon, StrikethroughIcon, UnderlineIcon } from "lucide-react";
 
-import { useToolbarContext } from "@/components/editor/editor-hooks/use-toolbar-context";
-import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar";
+import { useToolbarContext } from "@/components/editor/hooks/use-toolbar-context";
+import { useUpdateToolbarHandler } from "@/components/editor/hooks/use-update-toolbar";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const FORMATS = [

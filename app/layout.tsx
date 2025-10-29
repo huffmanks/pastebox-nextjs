@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import Header from "@/components/header";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
@@ -27,11 +28,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      suppressHydrationWarning>
       <body className={`dark ${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header />
-        <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
-        <Toaster richColors />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange>
+          <Header />
+          <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+          <Toaster richColors />
+        </ThemeProvider>
       </body>
     </html>
   );

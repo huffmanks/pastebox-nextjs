@@ -12,8 +12,8 @@ import { $isListNode } from "@lexical/list";
 import { $findMatchingParent } from "@lexical/utils";
 import { $getNodeByKey, $isRangeSelection, $isRootOrShadowRoot, type BaseSelection } from "lexical";
 
-import { useToolbarContext } from "@/components/editor/editor-hooks/use-toolbar-context";
-import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar";
+import { useToolbarContext } from "@/components/editor/hooks/use-toolbar-context";
+import { useUpdateToolbarHandler } from "@/components/editor/hooks/use-update-toolbar";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 
 function getCodeLanguageOptions(): [string, string][] {

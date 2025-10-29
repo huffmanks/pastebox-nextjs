@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 
 import debounce from "lodash.debounce";
 
-import { useUnmount } from "@/components/editor/editor-hooks/use-unmount";
+import { useUnmount } from "@/components/editor/hooks/use-unmount";
 
 type DebounceOptions = {
   leading?: boolean;

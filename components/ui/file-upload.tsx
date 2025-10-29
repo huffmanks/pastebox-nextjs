@@ -1,6 +1,5 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from "react";
 
 import { Slot } from "@radix-ui/react-slot";
@@ -618,7 +617,7 @@ const FileUploadDropzone = React.forwardRef<HTMLDivElement, FileUploadDropzonePr
         const target = event.target;
 
         const isFromTrigger =
-          target instanceof HTMLElement && target.closest('[data-slot="file-upload-trigger"]');
+          target instanceof HTMLElement && target.closest("[data-slot='file-upload-trigger']");
 
         if (!isFromTrigger) {
           context.inputRef.current?.click();

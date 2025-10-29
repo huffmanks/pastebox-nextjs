@@ -7,8 +7,8 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { $getNearestNodeFromDOMNode, isHTMLElement } from "lexical";
 import { createPortal } from "react-dom";
 
-import { useDebounce } from "@/components/editor/editor-hooks/use-debounce";
-import { CopyButton } from "@/components/editor/editor-ui/code-button";
+import { useDebounce } from "@/components/editor/hooks/use-debounce";
+import { CopyButton } from "@/components/editor/ui/copy-button";
 
 const CODE_PADDING = 8;
 
@@ -34,46 +34,42 @@ function CodeActionMenuContainer({ anchorElem }: { anchorElem: HTMLElement }): J
     return codeDOMNodeRef.current;
   }
 
-  const debouncedOnMouseMove = useDebounce(
-    (event: MouseEvent) => {
-      const { codeDOMNode, isOutside } = getMouseInfo(event);
-      if (isOutside) {
-        setShown(false);
-        return;
+  const debouncedOnMouseMove = useDebounce((event: MouseEvent) => {
+    const { codeDOMNode, isOutside } = getMouseInfo(event);
+    if (isOutside) {
+      setShown(false);
+      return;
+    }
+
+    if (!codeDOMNode) {
+      return;
+    }
+
+    codeDOMNodeRef.current = codeDOMNode;
+
+    let codeNode: CodeNode | null = null;
+    let _lang = "";
+
+    editor.update(() => {
+      const maybeCodeNode = $getNearestNodeFromDOMNode(codeDOMNode);
+
+      if ($isCodeNode(maybeCodeNode)) {
+        codeNode = maybeCodeNode;
+        _lang = codeNode.getLanguage() || "";
       }
+    });
 
-      if (!codeDOMNode) {
-        return;
-      }
-
-      codeDOMNodeRef.current = codeDOMNode;
-
-      let codeNode: CodeNode | null = null;
-      let _lang = "";
-
-      editor.update(() => {
-        const maybeCodeNode = $getNearestNodeFromDOMNode(codeDOMNode);
-
-        if ($isCodeNode(maybeCodeNode)) {
-          codeNode = maybeCodeNode;
-          _lang = codeNode.getLanguage() || "";
-        }
+    if (codeNode) {
+      const { y: editorElemY, right: editorElemRight } = anchorElem.getBoundingClientRect();
+      const { y, right } = codeDOMNode.getBoundingClientRect();
+      setLang(_lang);
+      setShown(true);
+      setPosition({
+        right: `${editorElemRight - right + CODE_PADDING}px`,
+        top: `${y - editorElemY}px`,
       });
-
-      if (codeNode) {
-        const { y: editorElemY, right: editorElemRight } = anchorElem.getBoundingClientRect();
-        const { y, right } = codeDOMNode.getBoundingClientRect();
-        setLang(_lang);
-        setShown(true);
-        setPosition({
-          right: `${editorElemRight - right + CODE_PADDING}px`,
-          top: `${y - editorElemY}px`,
-        });
-      }
-    },
-    50
-    // 1000
-  );
+    }
+  }, 50);
 
   useEffect(() => {
     if (!shouldListenMouseMove) {

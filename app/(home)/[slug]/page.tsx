@@ -5,10 +5,13 @@ import { boxes } from "@/db/schema";
 
 export default async function BoxPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+
   const box = await db.query.boxes.findFirst({
     where: eq(boxes.slug, slug),
     with: { files: true },
   });
+
+  // if (!box) redirect()
 
   console.log(box);
 

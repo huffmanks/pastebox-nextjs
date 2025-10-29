@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { CircleCheckIcon, CopyIcon } from "lucide-react";
+import { toast } from "sonner";
 
-import { CopyCheckIcon, CopyIcon } from "lucide-react";
+import { useCopy } from "@/hooks/use-copy";
 
 import {
   InputGroup,
@@ -12,13 +13,14 @@ import {
 } from "@/components/ui/input-group";
 
 export default function CopyInput({ url }: { url: string }) {
-  const [isCopying, setIsCopying] = useState(false);
+  const { copy, isCopySuccess } = useCopy();
 
   async function copyToClipboard() {
-    setIsCopying(true);
-    await navigator.clipboard.writeText(url);
-
-    setTimeout(() => setIsCopying(false), 2000);
+    try {
+      await copy(url);
+    } catch (_error) {
+      toast.error("Copying failed.");
+    }
   }
 
   return (
@@ -33,7 +35,7 @@ export default function CopyInput({ url }: { url: string }) {
         <InputGroupButton
           className="cursor-pointer"
           onClick={copyToClipboard}>
-          {isCopying ? <CopyCheckIcon className="stroke-green-500" /> : <CopyIcon />}
+          {isCopySuccess ? <CircleCheckIcon className="stroke-green-500" /> : <CopyIcon />}
         </InputGroupButton>
       </InputGroupAddon>
     </InputGroup>

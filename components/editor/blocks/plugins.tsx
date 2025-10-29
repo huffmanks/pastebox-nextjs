@@ -15,7 +15,6 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 
-import { ContentEditable } from "@/components/editor/editor-ui/content-editable";
 import { ActionsPlugin } from "@/components/editor/plugins/actions/actions-plugin";
 import { ClearEditorActionPlugin } from "@/components/editor/plugins/actions/clear-editor-plugin";
 import { CounterCharacterPlugin } from "@/components/editor/plugins/actions/counter-character-plugin";
@@ -37,6 +36,7 @@ import { CodeLanguageToolbarPlugin } from "@/components/editor/plugins/toolbar/c
 import { FontFormatToolbarPlugin } from "@/components/editor/plugins/toolbar/font-format-toolbar-plugin";
 import { LinkToolbarPlugin } from "@/components/editor/plugins/toolbar/link-toolbar-plugin";
 import { ToolbarPlugin } from "@/components/editor/plugins/toolbar/toolbar-plugin";
+import { ContentEditable } from "@/components/editor/ui/content-editable";
 import { Separator } from "@/components/ui/separator";
 
 export function Plugins() {

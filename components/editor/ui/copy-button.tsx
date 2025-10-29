@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { $isCodeNode } from "@lexical/code";
 import {
   $getNearestNodeFromDOMNode,
@@ -13,20 +11,13 @@ import { toast } from "sonner";
 import { useCopy } from "@/hooks/use-copy";
 import { castError } from "@/lib/utils";
 
-import { useDebounce } from "@/components/editor/editor-hooks/use-debounce";
-
 interface Props {
   editor: LexicalEditor;
   getCodeDOMNode: () => HTMLElement | null;
 }
 
 export function CopyButton({ editor, getCodeDOMNode }: Props) {
-  const [isCopyCompleted, setCopyCompleted] = useState<boolean>(false);
-  const [copiedText, copy] = useCopy();
-
-  const removeSuccessIcon = useDebounce(() => {
-    setCopyCompleted(false);
-  }, 1000);
+  const { copy, isCopySuccess } = useCopy();
 
   async function handleClick(): Promise<void> {
     const codeDOMNode = getCodeDOMNode();
@@ -50,11 +41,6 @@ export function CopyButton({ editor, getCodeDOMNode }: Props) {
 
     try {
       await copy(content);
-
-      if (!copiedText) return;
-
-      setCopyCompleted(true);
-      removeSuccessIcon();
     } catch (error) {
       castError(error);
       toast.error("Copying failed.");
@@ -66,7 +52,7 @@ export function CopyButton({ editor, getCodeDOMNode }: Props) {
       className="text-foreground/50 flex shrink-0 cursor-pointer items-center rounded border border-transparent bg-none p-1 uppercase"
       onClick={handleClick}
       aria-label="copy">
-      {isCopyCompleted ? <CircleCheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
+      {isCopySuccess ? <CircleCheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
     </button>
   );
 }

@@ -11,7 +11,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { slugOptions } from "@/lib/constants";
-import { castError } from "@/lib/utils";
 
 import { Editor } from "@/components/editor/blocks/editor";
 import { Button } from "@/components/ui/button";
@@ -35,23 +34,25 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 
-type ResponseData = {
+const _formSchema = z.object({
+  content: z.string().optional(),
+  slug: z.string().optional(),
+  password: z.string().optional(),
+  isProtected: z.boolean(),
+  showPassword: z.boolean(),
+  files: z.array(z.instanceof(File)),
+});
+
+type FormSchema = z.infer<typeof _formSchema>;
+
+type FormResponse = {
   id: string;
   slug: string;
   expiresAt: string;
 };
 
 export default function Form() {
-  const formSchema = z.object({
-    content: z.string().optional(),
-    slug: z.string().optional(),
-    password: z.string().optional(),
-    isProtected: z.boolean(),
-    showPassword: z.boolean(),
-    files: z.array(z.instanceof(File)),
-  });
-
-  const [formState, setFormState] = useState<z.infer<typeof formSchema>>({
+  const [formState, setFormState] = useState<FormSchema>({
     content: "",
     slug: "",
     password: "",
@@ -107,11 +108,11 @@ export default function Form() {
         return;
       }
 
-      const data: ResponseData = await res.json();
+      const data: FormResponse = await res.json();
 
       router.push(`/results/${data.slug}`);
-    } catch (error) {
-      castError(error);
+    } catch (_error) {
+      toast.error("Something went wrong!");
     } finally {
       setIsSubmitting(false);
     }

@@ -20,9 +20,9 @@ export const editorTheme: EditorThemeClasses = {
     checklist: "relative",
     listitem: "mx-8",
     listitemChecked:
-      'relative mx-2 px-6 list-none outline-none line-through before:content-[""] before:w-4 before:h-4 before:top-0.5 before:left-0 before:cursor-pointer before:block before:bg-cover before:absolute before:border before:border-primary before:rounded before:bg-primary before:bg-no-repeat after:content-[""] after:cursor-pointer after:border-white after:border-solid after:absolute after:block after:top-[6px] after:w-[3px] after:left-[7px] after:right-[7px] after:h-[6px] after:rotate-45 after:border-r-2 after:border-b-2 after:border-l-0 after:border-t-0',
+      "relative mx-2 px-6 list-none outline-none line-through before:content-[''] before:w-4 before:h-4 before:top-0.5 before:left-0 before:cursor-pointer before:block before:bg-cover before:absolute before:border before:border-primary before:rounded before:bg-primary before:bg-no-repeat after:content-[''] after:cursor-pointer after:border-white after:border-solid after:absolute after:block after:top-[6px] after:w-[3px] after:left-[7px] after:right-[7px] after:h-[6px] after:rotate-45 after:border-r-2 after:border-b-2 after:border-l-0 after:border-t-0",
     listitemUnchecked:
-      'relative mx-2 px-6 list-none outline-none before:content-[""] before:w-4 before:h-4 before:top-0.5 before:left-0 before:cursor-pointer before:block before:bg-cover before:absolute before:border before:border-primary before:rounded',
+      "relative mx-2 px-6 list-none outline-none before:content-[''] before:w-4 before:h-4 before:top-0.5 before:left-0 before:cursor-pointer before:block before:bg-cover before:absolute before:border before:border-primary before:rounded",
     nested: {
       listitem: "list-none before:hidden after:hidden",
     },
@@ -93,7 +93,7 @@ export const editorTheme: EditorThemeClasses = {
   characterLimit: "!bg-destructive/50",
   table: "EditorTheme__table w-fit overflow-scroll border-collapse",
   tableCell:
-    'EditorTheme__tableCell w-24 relative border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right"',
+    "EditorTheme__tableCell w-24 relative border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right",
   tableCellActionButton:
     "EditorTheme__tableCellActionButton bg-background block border-0 rounded-2xl w-5 h-5 text-foreground cursor-pointer",
   tableCellActionButtonContainer:
@@ -121,7 +121,7 @@ export const editorTheme: EditorThemeClasses = {
     base: "user-select-none",
     focus: "ring-2 ring-primary ring-offset-2",
   },
-  hr: 'p-0.5 border-none my-1 mx-0 cursor-pointer after:content-[""] after:block after:h-0.5 after:bg-muted selected:ring-2 selected:ring-primary selected:ring-offset-2 selected:user-select-none',
+  hr: "p-0.5 border-none my-1 mx-0 cursor-pointer after:content-[''] after:block after:h-0.5 after:bg-muted selected:ring-2 selected:ring-primary selected:ring-offset-2 selected:user-select-none",
   indent: "[--lexical-indent-base-value:40px]",
   mark: "",
   markOverlap: "",

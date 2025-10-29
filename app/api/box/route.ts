@@ -5,7 +5,7 @@ import path from "node:path";
 import { db } from "@/db";
 import { boxes, files } from "@/db/schema";
 import { EXPIRY_TIME } from "@/lib/constants";
-import { getFormString } from "@/lib/get-form-string";
+import { getFormString } from "@/lib/utils";
 
 export const runtime = "nodejs";
 
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
 
     if (uploadedFiles.length > 0) {
       await Promise.all(
-        uploadedFiles.map(async (file: any) => {
+        uploadedFiles.map(async (file: File) => {
           const fileName = file.name || "unnamed";
           const filePath = path.join(UPLOAD_DIR, `${boxId}_${fileName}`);
           const buffer = Buffer.from(await file.arrayBuffer());
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
           await db.insert(files).values({
             boxId,
             filePath,
-            mimeType: file.type || file.mimeType || "application/octet-stream",
+            mimeType: file.type || "application/octet-stream",
             size: file.size,
             fileName,
           });

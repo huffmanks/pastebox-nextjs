@@ -8,7 +8,7 @@ import {
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
 
-import { useToolbarContext } from "@/components/editor/editor-hooks/use-toolbar-context";
+import { useToolbarContext } from "@/components/editor/hooks/use-toolbar-context";
 
 export function useUpdateToolbarHandler(callback: (selection: BaseSelection) => void) {
   const [editor] = useLexicalComposerContext();

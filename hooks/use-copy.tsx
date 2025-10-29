@@ -1,28 +1,42 @@
 import { useCallback, useState } from "react";
 
+import { useDebounce } from "@/components/editor/hooks/use-debounce";
+
 type CopiedValue = string | null;
 
 type CopyFn = (text: string) => Promise<boolean>;
 
-export function useCopy(): [CopiedValue, CopyFn] {
+export function useCopy() {
   const [copiedText, setCopiedText] = useState<CopiedValue>(null);
+  const [isCopySuccess, setIsCopySuccess] = useState(false);
 
-  const copy: CopyFn = useCallback(async (text) => {
-    if (!navigator?.clipboard) {
-      console.warn("Clipboard not supported");
-      return false;
-    }
+  const debouncedReset = useDebounce(() => {
+    setIsCopySuccess(false);
+  }, 1500);
 
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedText(text);
-      return true;
-    } catch (error) {
-      console.warn("Copy failed", error);
-      setCopiedText(null);
-      return false;
-    }
-  }, []);
+  const copy: CopyFn = useCallback(
+    async (text) => {
+      if (!navigator?.clipboard) {
+        console.warn("Clipboard not supported");
+        setIsCopySuccess(false);
+        return false;
+      }
 
-  return [copiedText, copy];
+      try {
+        await navigator.clipboard.writeText(text);
+        setCopiedText(text);
+        setIsCopySuccess(true);
+        return true;
+      } catch (_error) {
+        setCopiedText(null);
+        setIsCopySuccess(false);
+        return false;
+      } finally {
+        debouncedReset();
+      }
+    },
+    [debouncedReset]
+  );
+
+  return { copiedText, copy, isCopySuccess };
 }

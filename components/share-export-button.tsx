@@ -25,7 +25,7 @@ interface Props {
 }
 
 export default function ShareExportButton({ title, text, url, svg }: Props) {
-  const [_, copy] = useCopy();
+  const { copy } = useCopy();
 
   async function shareNote() {
     if (!navigator.share) return;
@@ -36,8 +36,8 @@ export default function ShareExportButton({ title, text, url, svg }: Props) {
         text,
         url,
       });
-    } catch (error: any) {
-      if (error.name === "AbortError") return;
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === "AbortError") return;
       castError(error);
     }
   }
@@ -47,7 +47,7 @@ export default function ShareExportButton({ title, text, url, svg }: Props) {
       await copy(svg);
 
       toast.success("Copied SVG to clipboard.");
-    } catch (error) {
+    } catch (_error) {
       toast.error("Copying SVG failed.");
     }
   }

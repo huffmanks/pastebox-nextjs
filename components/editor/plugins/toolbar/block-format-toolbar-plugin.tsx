@@ -5,8 +5,8 @@ import { $isHeadingNode } from "@lexical/rich-text";
 import { $findMatchingParent, $getNearestNodeOfType } from "@lexical/utils";
 import { $isRangeSelection, $isRootOrShadowRoot, type BaseSelection } from "lexical";
 
-import { useToolbarContext } from "@/components/editor/editor-hooks/use-toolbar-context";
-import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar";
+import { useToolbarContext } from "@/components/editor/hooks/use-toolbar-context";
+import { useUpdateToolbarHandler } from "@/components/editor/hooks/use-update-toolbar";
 import { blockTypeToBlockName } from "@/components/editor/plugins/toolbar/block-format/block-format-data";
 import { Select, SelectContent, SelectGroup, SelectTrigger } from "@/components/ui/select";
 

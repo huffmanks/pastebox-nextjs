@@ -1,7 +1,7 @@
 import { $setBlocksType } from "@lexical/selection";
 import { $createParagraphNode, $getSelection, $isRangeSelection } from "lexical";
 
-import { useToolbarContext } from "@/components/editor/editor-hooks/use-toolbar-context";
+import { useToolbarContext } from "@/components/editor/hooks/use-toolbar-context";
 import { blockTypeToBlockName } from "@/components/editor/plugins/toolbar/block-format/block-format-data";
 import { SelectItem } from "@/components/ui/select";
 

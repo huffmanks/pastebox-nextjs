@@ -49,7 +49,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
         "Content-Disposition": `attachment; filename="${box.id}.zip"`,
       },
     });
-  } catch (error) {
+  } catch (_error) {
     return new Response("There was an error!", {
       status: 400,
     });

@@ -1,5 +1,7 @@
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import checkFile from "eslint-plugin-check-file";
+import nodePlugin from "eslint-plugin-n";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 const eslintConfig = defineConfig([
@@ -7,7 +9,7 @@ const eslintConfig = defineConfig([
   ...nextTs,
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
   {
-    plugins: ["check-file", "n"],
+    plugins: { "check-file": checkFile, n: nodePlugin },
   },
   {
     rules: {
@@ -16,7 +18,7 @@ const eslintConfig = defineConfig([
       "prefer-template": ["error"],
       semi: ["error"],
       quotes: ["error", "double"],
-      "n/no-process-env": ["error"],
+      "n/no-process-env": ["off"],
       "@typescript-eslint/no-unused-vars": [
         "error",
         {

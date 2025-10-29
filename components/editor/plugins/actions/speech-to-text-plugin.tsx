@@ -20,7 +20,7 @@ import {
 } from "lexical";
 import { MicIcon } from "lucide-react";
 
-import { useReport } from "@/components/editor/editor-hooks/use-report";
+import { useReport } from "@/components/editor/hooks/use-report";
 import { CAN_USE_DOM } from "@/components/editor/shared/can-use-dom";
 import {
   SPEECH_TO_TEXT_COMMAND,
