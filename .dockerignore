@@ -1,5 +1,4 @@
 # Git and IDE related files
-.dockerignore
 .git
 .gitignore
 .gitmodules
@@ -21,6 +20,11 @@ tmp/
 uploads/
 npm-debug.log
 README.md
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
 
 # Dependency management caches
 *.tsbuildinfo

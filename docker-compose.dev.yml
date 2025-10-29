@@ -6,10 +6,11 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=user
-      - POSTGRES_DB=pastebox
-      - POSTGRES_HOST=localhost
+      NODE_ENV: development
+      POSTGRES_HOST: ${DATABASE_HOST}
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
       - pastebox_pgdata_dev:/var/lib/postgresql/data
 
