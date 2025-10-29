@@ -29,7 +29,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-
 COPY --from=builder /app/public ./public
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
@@ -38,7 +37,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
 COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
-RUN chmod +x docker-entrypoint.sh
+RUN mkdir -p public/uploads \
+    && chown -R nextjs:nodejs public/uploads \
+    && chmod -R 775 public/uploads \
+    && chmod +x docker-entrypoint.sh
 
 USER nextjs
 
