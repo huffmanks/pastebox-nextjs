@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
-import { EyeIcon, EyeOffIcon, PackagePlusIcon, RefreshCcwIcon, Upload, X } from "lucide-react";
+import { EyeIcon, EyeOffIcon, PackagePlusIcon, RefreshCcwIcon, Upload, XIcon } from "lucide-react";
 import generatePassword from "omgopass";
 import { generateSlug } from "random-word-slugs";
 import slugify from "slugify";
@@ -270,7 +270,7 @@ export default function Form() {
                               variant="ghost"
                               size="icon"
                               className="size-7 cursor-pointer">
-                              <X />
+                              <XIcon />
                             </Button>
                           </FileUploadItemDelete>
                         </FileUploadItem>
