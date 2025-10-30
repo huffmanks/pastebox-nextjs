@@ -11,7 +11,7 @@ export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
-    const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
+    const UPLOAD_DIR = path.join(process.cwd(), "uploads");
 
     await fs.mkdir(UPLOAD_DIR, { recursive: true });
 
