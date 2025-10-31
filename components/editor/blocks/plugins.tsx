@@ -15,6 +15,8 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 
+import { cn } from "@/lib/utils";
+
 import { ActionsPlugin } from "@/components/editor/plugins/actions/actions-plugin";
 import { ClearEditorActionPlugin } from "@/components/editor/plugins/actions/clear-editor-plugin";
 import { CounterCharacterPlugin } from "@/components/editor/plugins/actions/counter-character-plugin";
@@ -39,7 +41,7 @@ import { ToolbarPlugin } from "@/components/editor/plugins/toolbar/toolbar-plugi
 import { ContentEditable } from "@/components/editor/ui/content-editable";
 import { Separator } from "@/components/ui/separator";
 
-export function Plugins() {
+export function Plugins({ isReadOnly = false }: { isReadOnly?: boolean }) {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
 
@@ -52,37 +54,42 @@ export function Plugins() {
   return (
     <div className="relative">
       {/* toolbar plugins */}
-      <ToolbarPlugin>
-        {({ blockType }) => (
-          <div className="vertical-align-middle sticky top-0 z-10 flex gap-2 overflow-auto border-b p-1">
-            <BlockFormatDropDown>
-              <FormatParagraph />
-              <FormatHeading levels={["h1", "h2", "h3"]} />
-              <FormatNumberedList />
-              <FormatBulletedList />
-              <FormatCheckList />
-              <FormatCodeBlock />
-              <FormatQuote />
-            </BlockFormatDropDown>
-            <Separator
-              orientation="vertical"
-              className="h-7!"
-            />
-            {blockType === "code" ? (
-              <CodeLanguageToolbarPlugin />
-            ) : (
-              <>
-                <FontFormatToolbarPlugin />
-                <Separator
-                  orientation="vertical"
-                  className="h-7!"
-                />
-                <LinkToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
-              </>
-            )}
-          </div>
-        )}
-      </ToolbarPlugin>
+      {!isReadOnly && (
+        <ToolbarPlugin>
+          {({ blockType }) => (
+            <div className="vertical-align-middle sticky top-0 z-10 flex gap-2 overflow-auto border-b p-1">
+              <BlockFormatDropDown>
+                <FormatParagraph />
+                <FormatHeading levels={["h1", "h2", "h3"]} />
+                <FormatNumberedList />
+                <FormatBulletedList />
+                <FormatCheckList />
+                <FormatCodeBlock />
+                <FormatQuote />
+              </BlockFormatDropDown>
+              <Separator
+                orientation="vertical"
+                className="h-7!"
+              />
+              {blockType === "code" ? (
+                <CodeLanguageToolbarPlugin />
+              ) : (
+                <>
+                  <FontFormatToolbarPlugin />
+                  <Separator
+                    orientation="vertical"
+                    className="h-7!"
+                  />
+                  <LinkToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
+                </>
+              )}
+            </div>
+          )}
+        </ToolbarPlugin>
+      )}
+
+      {/* editor plugins */}
+
       <div className="relative">
         <RichTextPlugin
           contentEditable={
@@ -97,48 +104,59 @@ export function Plugins() {
           ErrorBoundary={LexicalErrorBoundary}
         />
         <ClickableLinkPlugin />
-        <ListPlugin />
-        <CheckListPlugin />
-        <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
-        <CodeHighlightPlugin />
-        <MarkdownShortcutPlugin
-          transformers={[
-            CHECK_LIST,
-            ...ELEMENT_TRANSFORMERS,
-            ...MULTILINE_ELEMENT_TRANSFORMERS,
-            ...TEXT_FORMAT_TRANSFORMERS,
-            ...TEXT_MATCH_TRANSFORMERS,
-          ]}
-        />
-        <AutoLinkPlugin />
-        <LinkPlugin />
-        <FloatingLinkEditorPlugin
-          anchorElem={floatingAnchorElem}
-          isLinkEditMode={isLinkEditMode}
-          setIsLinkEditMode={setIsLinkEditMode}
-        />
-        {/* editor plugins */}
+        {!isReadOnly && (
+          <>
+            <ListPlugin />
+            <CheckListPlugin />
+            <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
+            <CodeHighlightPlugin />
+            <MarkdownShortcutPlugin
+              transformers={[
+                CHECK_LIST,
+                ...ELEMENT_TRANSFORMERS,
+                ...MULTILINE_ELEMENT_TRANSFORMERS,
+                ...TEXT_FORMAT_TRANSFORMERS,
+                ...TEXT_MATCH_TRANSFORMERS,
+              ]}
+            />
+            <AutoLinkPlugin />
+            <LinkPlugin />
+            <FloatingLinkEditorPlugin
+              anchorElem={floatingAnchorElem}
+              isLinkEditMode={isLinkEditMode}
+              setIsLinkEditMode={setIsLinkEditMode}
+            />
+          </>
+        )}
       </div>
+
       <ActionsPlugin>
-        <div className="clear-both flex items-center justify-between gap-2 overflow-auto border-t p-1">
-          <div className="flex flex-1 justify-start">
-            {/* left side action buttons */}
-            <SpeechToTextPlugin />
-          </div>
-          <div>
+        <div
+          className={cn(
+            "clear-both flex items-center justify-between gap-2 overflow-auto border-t p-1",
+            isReadOnly && "min-h-10"
+          )}>
+          {!isReadOnly && (
+            <div className="flex flex-1 justify-start">
+              {/* left side action buttons */}
+              <SpeechToTextPlugin />
+            </div>
+          )}
+          <div className="flex flex-1 justify-center">
             {/* center action buttons */}
             <CounterCharacterPlugin charset="UTF-16" />
           </div>
-          <div className="flex flex-1 justify-end">
-            {/* right side action buttons */}
-            <>
-              <ClearEditorActionPlugin />
-              <ClearEditorPlugin />
-            </>
-          </div>
+          {!isReadOnly && (
+            <div className="flex flex-1 justify-end">
+              {/* right side action buttons */}
+              <>
+                <ClearEditorActionPlugin />
+                <ClearEditorPlugin />
+              </>
+            </div>
+          )}
         </div>
       </ActionsPlugin>
-      {/* actions plugins */}
     </div>
   );
 }

@@ -78,8 +78,7 @@ export async function POST(request: Request) {
     }
 
     return Response.json(createdBox);
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
     return new Response("There was an error!", {
       status: 400,
     });

@@ -1,17 +1,12 @@
-import { headers } from "next/headers";
-
 import { PackageCheckIcon } from "lucide-react";
 
 import CopyInput from "@/components/copy-input";
-import ShareExportButton from "@/components/share-export-button";
+import ShareExportButtonGroup from "@/components/share-export-button-group";
 
 export default async function ResultsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  const h = await headers();
-  const host = h.get("host");
-  const protocol = h.get("x-forwarded-proto") || "http";
-  const baseUrl = `${protocol}://${host}`;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
   const boxUrl = `${baseUrl}/${slug}`;
 
@@ -40,9 +35,7 @@ export default async function ResultsPage({ params }: { params: Promise<{ slug: 
             <h2 className="mb-1 text-lg font-medium">View the box anywhere</h2>
             <p className="text-muted-foreground mb-4 text-sm">Scan, share or export the QR code.</p>
 
-            <ShareExportButton
-              title="Share note"
-              text="Access you box."
+            <ShareExportButtonGroup
               url={boxUrl}
               svg={svg.lightSvg}
             />

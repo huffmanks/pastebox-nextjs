@@ -22,12 +22,14 @@ const editorConfig: InitialConfigType = {
 export function Editor({
   editorState,
   editorSerializedState,
+  isEditable = true,
   onChange,
   onSerializedChange,
   setContent,
 }: {
   editorState?: EditorState;
   editorSerializedState?: SerializedEditorState;
+  isEditable?: boolean;
   onChange?: (editorState: EditorState) => void;
   onSerializedChange?: (editorSerializedState: SerializedEditorState) => void;
   setContent?: (editorState: string) => void;
@@ -37,11 +39,12 @@ export function Editor({
       <LexicalComposer
         initialConfig={{
           ...editorConfig,
+          editable: isEditable,
           ...(editorState ? { editorState } : {}),
           ...(editorSerializedState ? { editorState: JSON.stringify(editorSerializedState) } : {}),
         }}>
         <TooltipProvider>
-          <Plugins />
+          <Plugins isReadOnly={!isEditable} />
 
           <Field>
             <OnChangePlugin

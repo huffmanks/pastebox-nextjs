@@ -1,11 +1,10 @@
 "use client";
 
-import { ChevronDownIcon, CopyIcon, FileCodeIcon, ImageIcon, Share2Icon } from "lucide-react";
+import { ChevronDownIcon, CopyIcon, FileCodeIcon, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { useCopy } from "@/hooks/use-copy";
 import { downloadBase64File, downloadSvgFile, svgToBase64Png } from "@/lib/download";
-import { castError } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -17,30 +16,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import ShareButton from "./share-button";
+
 interface Props {
-  title: string;
-  text: string;
   url: string;
   svg: string;
 }
 
-export default function ShareExportButton({ title, text, url, svg }: Props) {
+export default function ShareExportButtonGroup({ url, svg }: Props) {
   const { copy } = useCopy();
-
-  async function shareNote() {
-    if (!navigator.share) return;
-
-    try {
-      await navigator.share({
-        title,
-        text,
-        url,
-      });
-    } catch (error: unknown) {
-      if (error instanceof Error && error.name === "AbortError") return;
-      castError(error);
-    }
-  }
 
   async function handleCopyQrCode() {
     try {
@@ -65,14 +49,7 @@ export default function ShareExportButton({ title, text, url, svg }: Props) {
 
   return (
     <ButtonGroup className="w-[calc(100%-41px)]">
-      <Button
-        variant="outline"
-        className="w-full cursor-pointer"
-        aria-label="Share your box."
-        onClick={shareNote}>
-        <Share2Icon />
-        <span>Share</span>
-      </Button>
+      <ShareButton url={url} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

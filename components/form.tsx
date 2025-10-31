@@ -10,7 +10,7 @@ import slugify from "slugify";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { slugOptions } from "@/lib/constants";
+import { SLUG_OPTIONS } from "@/lib/constants";
 
 import { Editor } from "@/components/editor/blocks/editor";
 import { Button } from "@/components/ui/button";
@@ -90,7 +90,7 @@ export default function Form() {
     const form = e.currentTarget as HTMLFormElement;
     const formData = new FormData(form);
 
-    const finalSlug = formState.slug ? slugify(formState.slug, slugOptions) : generateSlug();
+    const finalSlug = formState.slug ? slugify(formState.slug, SLUG_OPTIONS) : generateSlug();
     formData.set("slug", finalSlug);
 
     if (formState.content) formData.append("content", formState.content);
@@ -151,7 +151,7 @@ export default function Form() {
                   onFocus={(e) => e.target.select()}
                   onBlur={(e) => {
                     const val = e.target.value;
-                    if (val) updateForm({ slug: slugify(val, slugOptions) });
+                    if (val) updateForm({ slug: slugify(val, SLUG_OPTIONS) });
                   }}
                 />
               </Field>

@@ -12,8 +12,8 @@
     "db:push": "NODE_ENV=development dotenv -e .env.local -- drizzle-kit push",
     "db:migrate": "NODE_ENV=development dotenv -e .env.local -- drizzle-kit migrate",
     "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
-    "db:dev:up": "docker compose -f docker-compose.dev.yml up -d",
-    "db:dev:down": "docker compose -f docker-compose.dev.yml down -v",
+    "docker:dev:up": "docker compose -f docker-compose.dev.yml up -d",
+    "docker:dev:down": "docker compose -f docker-compose.dev.yml down",
     "docker:prod:build": "docker compose build --no-cache",
     "docker:prod:up": "docker compose up -d"
   },
