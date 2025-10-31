@@ -5,3 +5,5 @@ export const slugOptions = {
   strict: true,
   trim: true,
 };
+
+export const UPLOADS_DIR = process.env.NODE_ENV === "development" ? "public/uploads" : "uploads";

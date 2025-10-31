@@ -1,5 +1,7 @@
 import { relations } from "drizzle-orm";
 import { boolean, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import z from "zod";
 
 export const boxes = pgTable("boxes", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -16,10 +18,10 @@ export const files = pgTable("files", {
   boxId: uuid("box_id")
     .notNull()
     .references(() => boxes.id, { onDelete: "cascade" }),
-  filePath: text("file_path").notNull(),
-  mimeType: text("mime_type").notNull(),
+  name: text("name").notNull(),
+  type: text("type").notNull(),
   size: integer("size").notNull(),
-  fileName: text("file_name").notNull(),
+  path: text("path").notNull(),
   uploadedAt: timestamp("uploaded_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
@@ -33,3 +35,13 @@ export const filesRelations = relations(files, ({ one }) => ({
     references: [boxes.id],
   }),
 }));
+
+const _boxInsertSchema = createInsertSchema(boxes);
+const _boxSelectSchema = createSelectSchema(boxes);
+const _fileInsertSchema = createInsertSchema(files);
+const _fileSelectSchema = createSelectSchema(files);
+
+export type BoxInsert = z.infer<typeof _boxInsertSchema>;
+export type BoxSelect = z.infer<typeof _boxSelectSchema>;
+export type FileInsert = z.infer<typeof _fileInsertSchema>;
+export type FileSelect = z.infer<typeof _fileSelectSchema>;

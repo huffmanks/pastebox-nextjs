@@ -1,6 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
 
+import { UPLOADS_DIR } from "@/lib/constants";
+
 export const runtime = "nodejs";
 
 export async function GET(
@@ -8,7 +10,8 @@ export async function GET(
   { params }: { params: Promise<{ filename: string }> }
 ) {
   const { filename } = await params;
-  const filePath = path.join(process.cwd(), "uploads", filename);
+
+  const filePath = path.join(process.cwd(), UPLOADS_DIR, filename);
 
   try {
     await fs.access(filePath);

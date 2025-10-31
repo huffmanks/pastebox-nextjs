@@ -26,7 +26,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 
     const zip = new yazl.ZipFile();
     for (const file of box.files) {
-      zip.addFile(file.filePath, file.fileName);
+      zip.addFile(file.path, file.name);
     }
 
     const zipPath = `/tmp/${box.id}.zip`;

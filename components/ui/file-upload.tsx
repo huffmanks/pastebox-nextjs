@@ -13,7 +13,8 @@ import {
   FileVideoIcon,
 } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { FileSelect } from "@/db/schema";
+import { cn, formatBytes } from "@/lib/utils";
 
 const ROOT_NAME = "FileUpload";
 const DROPZONE_NAME = "FileUploadDropzone";
@@ -911,14 +912,7 @@ const FileUploadItem = React.forwardRef<HTMLDivElement, FileUploadItemProps>(
 );
 FileUploadItem.displayName = ITEM_NAME;
 
-function formatBytes(bytes: number) {
-  if (bytes === 0) return "0 B";
-  const sizes = ["B", "KB", "MB", "GB", "TB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / 1024 ** i).toFixed(i ? 1 : 0)} ${sizes[i]}`;
-}
-
-function getFileIcon(file: File) {
+function getFileIcon(file: File | FileSelect) {
   const type = file.type;
   const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
 
@@ -1289,6 +1283,7 @@ export {
   FileUploadItemProgress,
   FileUploadList,
   FileUploadTrigger,
+  getFileIcon,
   Item,
   ItemDelete,
   ItemMetadata,

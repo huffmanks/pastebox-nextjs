@@ -12,10 +12,10 @@ CREATE TABLE "boxes" (
 CREATE TABLE "files" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"box_id" uuid NOT NULL,
-	"file_path" text NOT NULL,
-	"mime_type" text NOT NULL,
+	"name" text NOT NULL,
+	"type" text NOT NULL,
 	"size" integer NOT NULL,
-	"file_name" text NOT NULL,
+	"path" text NOT NULL,
 	"uploaded_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint

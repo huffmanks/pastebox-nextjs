@@ -4,16 +4,18 @@ import path from "node:path";
 
 import { db } from "@/db";
 import { boxes, files } from "@/db/schema";
-import { EXPIRY_TIME } from "@/lib/constants";
+import { EXPIRY_TIME, UPLOADS_DIR } from "@/lib/constants";
 import { getFormString } from "@/lib/utils";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
-    const UPLOAD_DIR = path.join(process.cwd(), "uploads");
-
-    await fs.mkdir(UPLOAD_DIR, { recursive: true });
+    try {
+      await fs.access(UPLOADS_DIR);
+    } catch (_error) {
+      await fs.mkdir(UPLOADS_DIR, { recursive: true });
+    }
 
     const formData = await request.formData();
 
@@ -58,18 +60,18 @@ export async function POST(request: Request) {
     if (uploadedFiles.length > 0) {
       await Promise.all(
         uploadedFiles.map(async (file: File) => {
-          const fileName = file.name || "unnamed";
-          const filePath = path.join(UPLOAD_DIR, `${boxId}_${fileName}`);
+          const name = `${boxId}_${file.name}`;
+          const uploadPath = path.join(UPLOADS_DIR, name);
           const buffer = Buffer.from(await file.arrayBuffer());
 
-          await fs.writeFile(filePath, buffer);
+          await fs.writeFile(uploadPath, buffer);
 
           await db.insert(files).values({
             boxId,
-            filePath,
-            mimeType: file.type || "application/octet-stream",
+            path: `/uploads/${name}`,
+            type: file.type || "application/octet-stream",
             size: file.size,
-            fileName,
+            name,
           });
         })
       );

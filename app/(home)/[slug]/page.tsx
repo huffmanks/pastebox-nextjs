@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
 
 import { eq } from "drizzle-orm";
+import { CloudDownloadIcon, TrashIcon } from "lucide-react";
 
 import { db } from "@/db";
 import { boxes } from "@/db/schema";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
+import BoxUploadsList from "@/components/box-uploads-list";
+import { Button } from "@/components/ui/button";
 
 export default async function BoxPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -17,33 +19,34 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
 
   if (!box) notFound();
 
-  const content = JSON.stringify(box.content);
-
   return (
-    <div>
-      <div>{box.id}</div>
-      <div>{box.slug}</div>
-      {box?.content && (
-        <div>
-          <pre className="wrap-break-word">{content}</pre>
-        </div>
-      )}
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-[3fr_1.25fr]">
+      <div>
+        <div>{box.id}</div>
+        <div>{box.slug}</div>
+      </div>
 
-      {box?.files && box.files.length && (
+      <div>
+        {box?.files && box.files.length && (
+          <div className="mb-4">
+            <Button className="mb-4 w-full cursor-pointer">
+              <CloudDownloadIcon />
+              <span>Download all</span>
+            </Button>
+            <BoxUploadsList files={box.files} />
+          </div>
+        )}
         <div>
-          <ScrollArea className="max-h-80 w-full rounded-md border p-4">
-            {box.files.map((file) => (
-              <div key={file.id}>
-                <div>{file.id}</div>
-                <div>{file.filePath}</div>
-                <div>{file.mimeType}</div>
-                <div>{file.size}</div>
-                <div>{file.uploadedAt.toLocaleDateString()}</div>
-              </div>
-            ))}
-          </ScrollArea>
+          <Button
+            variant="outline"
+            className="group focus-within:bg-destructive! hover:bg-destructive! w-full cursor-pointer focus-within:border-transparent! hover:border-transparent!">
+            <TrashIcon className="group-hover:text-foreground group-focus-within:text-foreground text-destructive" />
+            <span className="group-hover:text-foreground group-focus-within:text-foreground text-destructive">
+              Delete box
+            </span>
+          </Button>
         </div>
-      )}
+      </div>
     </div>
   );
 }
