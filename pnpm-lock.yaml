@@ -11,6 +11,9 @@ importers:
       '@lexical/code':
         specifier: ^0.37.0
         version: 0.37.0
+      '@lexical/html':
+        specifier: 0.37.0
+        version: 0.37.0
       '@lexical/link':
         specifier: ^0.37.0
         version: 0.37.0
