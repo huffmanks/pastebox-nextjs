@@ -1,6 +1,6 @@
 import { castError } from "@/lib/utils";
 
-function downloadFile({ blob, fileName }: { blob: Blob; fileName: string }) {
+export function downloadBlobFile({ blob, fileName }: { blob: Blob; fileName: string }) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -18,7 +18,7 @@ export function downloadBase64File({ base64, fileName }: { base64: string; fileN
 
 export function downloadSvgFile({ svg, fileName }: { svg: string; fileName: string }) {
   const blob = new Blob([svg], { type: "image/svg+xml" });
-  downloadFile({ blob, fileName });
+  downloadBlobFile({ blob, fileName });
 }
 
 export function svgToBase64Png({

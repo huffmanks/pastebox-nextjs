@@ -1,10 +1,12 @@
 import { eq } from "drizzle-orm";
 import { createWriteStream } from "node:fs";
 import fs from "node:fs/promises";
+import path from "node:path";
 import yazl from "yazl";
 
 import { db } from "@/db";
 import { boxes } from "@/db/schema";
+import { UPLOADS_DIR } from "@/lib/constants";
 
 export const runtime = "nodejs";
 
@@ -26,7 +28,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 
     const zip = new yazl.ZipFile();
     for (const file of box.files) {
-      zip.addFile(file.path, file.name);
+      const filePath = path.join(UPLOADS_DIR, file.name);
+      zip.addFile(filePath, file.name);
     }
 
     const zipPath = `/tmp/${box.id}.zip`;

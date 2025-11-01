@@ -6,6 +6,6 @@ export const SLUG_OPTIONS = {
   trim: true,
 };
 
-export const UPLOADS_DIR = process.env.NODE_ENV === "development" ? "public/uploads" : "uploads";
+export const UPLOADS_DIR = "uploads";
 
 export const SHARE_API_META = { title: "Share note", text: "Access you box." };

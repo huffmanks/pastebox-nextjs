@@ -7,7 +7,7 @@ import type { EditorState, SerializedEditorState } from "lexical";
 import { nodes } from "@/components/editor/blocks/nodes";
 import { Plugins } from "@/components/editor/blocks/plugins";
 import { editorTheme } from "@/components/editor/themes/editor-theme";
-import CopyEditorButton from "@/components/editor/ui/copy-editor-button";
+import ReadOnlyToolbar from "@/components/editor/ui/read-only-toolbar";
 import { Field } from "@/components/ui/field";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -24,10 +24,12 @@ export function Editor({
   editorState,
   editorSerializedState,
   isEditable = true,
+  slug,
   onChange,
   onSerializedChange,
   setContent,
 }: {
+  slug?: string;
   editorState?: EditorState;
   editorSerializedState?: SerializedEditorState;
   isEditable?: boolean;
@@ -45,7 +47,7 @@ export function Editor({
           ...(editorSerializedState ? { editorState: JSON.stringify(editorSerializedState) } : {}),
         }}>
         <TooltipProvider>
-          <CopyEditorButton />
+          {!isEditable && slug && <ReadOnlyToolbar slug={slug} />}
           <Plugins isReadOnly={!isEditable} />
 
           <Field>

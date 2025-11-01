@@ -7,11 +7,12 @@
 .idea
 *.swp
 *.bak
+*.log
 
 # Build artifacts and temporary files
 node_modules/
-/.next/
-/out/
+.next/
+out/
 dist/
 build/
 *.log
@@ -20,6 +21,7 @@ tmp/
 uploads/
 npm-debug.log
 README.md
+.pnpm-store
 
 # Docker
 Dockerfile

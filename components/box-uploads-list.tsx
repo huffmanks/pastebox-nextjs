@@ -1,8 +1,10 @@
 "use client";
 
 import { DownloadIcon } from "lucide-react";
+import { toast } from "sonner";
 
 import { FileSelect } from "@/db/schema";
+import { downloadBlobFile } from "@/lib/download";
 import { cn, formatBytes } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
@@ -14,9 +16,6 @@ interface Props {
 }
 
 export default function BoxUploadsList({ files }: Props) {
-  function handleDownload() {
-    console.log("downloaded");
-  }
   return (
     <ScrollArea className="max-h-80 w-full rounded-md border p-4">
       <div className="data-[state=inactive]:fade-out-0 data-[state=active]:fade-in-0 data-[state=inactive]:slide-out-to-top-2 data-[state=active]:slide-in-from-top-2 data-[state=active]:animate-in data-[state=inactive]:animate-out flex flex-col gap-2">
@@ -26,13 +25,10 @@ export default function BoxUploadsList({ files }: Props) {
             className="relative flex w-full items-center gap-2.5 rounded-md border p-3 has-data-[slot=file-upload-progress]:flex-col has-data-[slot=file-upload-progress]:items-start">
             <ItemPreview file={file} />
             <ItemMetadata file={file} />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-7 cursor-pointer"
-              onClick={handleDownload}>
-              <DownloadIcon />
-            </Button>
+            <DownloadButton
+              filePath={file.path}
+              fileName={file.name}
+            />
           </div>
         ))}
       </div>
@@ -42,7 +38,7 @@ export default function BoxUploadsList({ files }: Props) {
 
 function ItemPreview({ file }: { file: FileSelect }) {
   const isImage = file.type.startsWith("image/");
-  const fileUrl = `${process.env.NEXT_PUBLIC_APP_URL}${file.path}`;
+  const fileUrl = `/api${file.path}`;
 
   return (
     <div
@@ -71,5 +67,30 @@ function ItemMetadata({ file }: { file: FileSelect }) {
         <span className="text-muted-foreground text-xs">{formatBytes(file.size)}</span>
       </>
     </div>
+  );
+}
+
+function DownloadButton({ filePath, fileName }: { filePath: string; fileName: string }) {
+  async function handleDownload() {
+    try {
+      const fileUrl = `/api${filePath}`;
+      const res = await fetch(fileUrl);
+
+      const blob = await res.blob();
+
+      downloadBlobFile({ blob, fileName });
+    } catch (_error) {
+      toast.error("Download failed");
+    }
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="size-7 cursor-pointer"
+      onClick={handleDownload}>
+      <DownloadIcon />
+    </Button>
   );
 }

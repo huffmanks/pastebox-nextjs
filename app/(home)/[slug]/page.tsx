@@ -2,16 +2,17 @@ import { notFound } from "next/navigation";
 
 import { eq } from "drizzle-orm";
 import { EditorState } from "lexical";
-import { CloudDownloadIcon, FileXIcon, NotebookIcon, TrashIcon } from "lucide-react";
+import { FileXIcon, NotebookIcon } from "lucide-react";
 
 import { db } from "@/db";
 import { boxes } from "@/db/schema";
 import { cn } from "@/lib/utils";
 
 import BoxUploadsList from "@/components/box-uploads-list";
+import DeleteBoxButton from "@/components/delete-box-button";
+import DownlaodAllButton from "@/components/download-all-button";
 import { Editor } from "@/components/editor/blocks/editor";
 import ShareButton from "@/components/share-button";
-import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyDescription,
@@ -36,8 +37,6 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <>
-      <h1 className="mb-4 text-lg font-bold">{box.slug}</h1>
-
       <div
         className={cn(
           "grid grid-cols-1 gap-8",
@@ -46,6 +45,7 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
         <section>
           {hasNote ? (
             <Editor
+              slug={box.slug}
               editorState={editorJson}
               isEditable={false}
             />
@@ -65,10 +65,7 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
         <section>
           {box?.files && box.files.length ? (
             <div className="mb-4">
-              <Button className="mb-4 w-full cursor-pointer">
-                <CloudDownloadIcon />
-                <span>Download all</span>
-              </Button>
+              <DownlaodAllButton id={box.id} />
               <div className="text-muted-foreground mb-2 text-sm">
                 {box.files.length} file{box.files.length > 1 ? "s" : ""} attached
               </div>
@@ -87,12 +84,7 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
           )}
           <div className="space-y-4">
             <ShareButton url={`${process.env.NEXT_PUBLIC_APP_URL}/${box.slug}`} />
-            <Button
-              variant="destructive"
-              className="bg-destructive! w-full cursor-pointer">
-              <TrashIcon />
-              <span>Delete box</span>
-            </Button>
+            <DeleteBoxButton />
           </div>
         </section>
       </div>
