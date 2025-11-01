@@ -44,7 +44,11 @@ export default function ReadOnlyToolbar({ slug }: { slug: string }) {
         className="ml-auto cursor-pointer"
         onClick={handleCopyRichText}
         aria-label="copy to clipboard">
-        {isCopySuccess ? <CircleCheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
+        {isCopySuccess ? (
+          <CircleCheckIcon className="size-4 stroke-green-500" />
+        ) : (
+          <CopyIcon className="size-4" />
+        )}
       </Button>
     </div>
   );

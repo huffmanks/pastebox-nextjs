@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 import BoxUploadsList from "@/components/box-uploads-list";
 import DeleteBoxButton from "@/components/delete-box-button";
-import DownlaodAllButton from "@/components/download-all-button";
+import DownloadAllButton from "@/components/download-all-button";
 import { Editor } from "@/components/editor/blocks/editor";
 import ShareButton from "@/components/share-button";
 import {
@@ -65,7 +65,7 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
         <section>
           {box?.files && box.files.length ? (
             <div className="mb-4">
-              <DownlaodAllButton id={box.id} />
+              {box.files.length > 1 && <DownloadAllButton id={box.id} />}
               <div className="text-muted-foreground mb-2 text-sm">
                 {box.files.length} file{box.files.length > 1 ? "s" : ""} attached
               </div>

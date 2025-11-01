@@ -123,6 +123,7 @@ export default function Form() {
       <form
         className="grid grid-cols-1 gap-8 md:grid-cols-[3fr_1.25fr]"
         autoComplete="off"
+        onFocus={() => setErrors({})}
         onSubmit={handleSubmit}>
         <div>
           <Field

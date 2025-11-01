@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 
-export default function DownlaodAllButton({ id }: { id: string }) {
+export default function DownloadAllButton({ id }: { id: string }) {
   async function handleDownloadAll() {
     try {
       window.location.href = `/api/box/${id}/download`;

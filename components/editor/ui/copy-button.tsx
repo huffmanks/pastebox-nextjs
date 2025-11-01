@@ -57,7 +57,11 @@ export function CopyButton({ editor, getCodeDOMNode }: Props) {
       className="cursor-pointer"
       onClick={handleClick}
       aria-label="copy to clipboard">
-      {isCopySuccess ? <CircleCheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
+      {isCopySuccess ? (
+        <CircleCheckIcon className="size-4 stroke-green-500" />
+      ) : (
+        <CopyIcon className="size-4" />
+      )}
     </Button>
   );
 }
