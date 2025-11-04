@@ -5,7 +5,7 @@ A lightweight, self-hostable alternative to Pastebin for sharing text and files 
 ## Features
 
 - **Simple & Fast** - Clean interface, instant sharing
-- **Text Sharing** - Share code snippets, notes, and text
+- **Text Sharing** - Share code snippets, notes and text
 - **File Uploads** - Share any file type
 - **Temporary Storage** - All pastes expire after 24 hours
 - **Self-Hosted** - Keep your data on your network
@@ -15,22 +15,20 @@ A lightweight, self-hostable alternative to Pastebin for sharing text and files 
 
 ### Self-host with Docker
 
-```sh
-git clone https://github.com/huffmanks/pastebox.git
-```
+#### Clone repo
 
 ```sh
-cd pastebox
+git clone https://github.com/huffmanks/pastebox.git && cd pastebox
 ```
+
+#### Build Docker image
 
 ```sh
-# Build and run with Docker Compose
-docker compose up -d
+pnpm docker:prod:build
 ```
 
-## How It Works
+#### Run Docker container
 
-1. **Share** - Upload text or files
-2. **Get Link** - Receive a short, shareable URL
-3. **Access** - Anyone on your network can view/download
-4. **Auto-Cleanup** - Content expires after 24 hours
+```sh
+pnpm docker:prod:up
+```

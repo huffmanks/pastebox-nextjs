@@ -32,12 +32,10 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
-COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
 
 RUN mkdir -p uploads \
     && chown -R nextjs:nodejs uploads \
-    && chmod -R 775 uploads \
-    && chmod +x docker-entrypoint.sh
+    && chmod -R 775 uploads
 
 USER nextjs
 
@@ -46,5 +44,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "npx drizzle-kit migrate && node server.js"]
