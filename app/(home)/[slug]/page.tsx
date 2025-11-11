@@ -84,7 +84,7 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
           )}
           <div className="space-y-4">
             <ShareButton url={`${process.env.NEXT_PUBLIC_APP_URL}/${box.slug}`} />
-            <DeleteBoxButton />
+            <DeleteBoxButton boxId={box.id} />
           </div>
         </section>
       </div>

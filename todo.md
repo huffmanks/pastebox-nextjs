@@ -1,10 +1,12 @@
-Client side
+## Client
 
 1. Validate password on view.
 2. [pastebox view](<app/(home)/[slug]/page.tsx>)
-   1. delete box and all files.
-   2. Show expired time left.
+   - [ ] Show expired time left.
 
-Server side
+## Server
 
-1. hash password.
+1. Hash password.
+2. Refactor some apis to actions.
+3. Cron job to remove expired boxes.
+4. Check expiration before returning box.

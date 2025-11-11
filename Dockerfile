@@ -33,9 +33,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
-RUN mkdir -p uploads \
-    && chown -R nextjs:nodejs uploads \
-    && chmod -R 775 uploads
+RUN mkdir -p /app/uploads \
+    && chown -R nextjs:nodejs /app/uploads \
+    && chmod -R 775 /app/uploads
 
 USER nextjs
 
