@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "bun run .next/standalone/server.js",
     "lint": "eslint",
     "format": "prettier components/ --write",
     "db:generate": "NODE_ENV=development dotenv -e .env.local -- drizzle-kit generate",
