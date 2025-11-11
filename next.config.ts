@@ -19,7 +19,6 @@ const config = Promise.resolve(drizzle).then((drizzle) => ({
   output: "standalone",
   outputFileTracingIncludes: {
     "**": [...drizzle],
-    "/": ["./db/**/*"],
   },
 }));
 

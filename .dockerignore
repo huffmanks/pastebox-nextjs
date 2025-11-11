@@ -10,6 +10,7 @@
 *.log
 
 # Build artifacts and temporary files
+public/
 node_modules/
 .next/
 out/
@@ -21,11 +22,13 @@ tmp/
 uploads/
 npm-debug.log
 README.md
+todo.md
 .pnpm-store
 
 # Docker
 Dockerfile
 docker-compose.yml
+docker-compose.dev.yml
 .dockerignore
 
 # Dependency management caches

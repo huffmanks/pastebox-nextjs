@@ -6,7 +6,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml* ./
-RUN corepack enable pnpm && pnpm i --frozen-lockfile
+RUN corepack enable pnpm && pnpm install --prod --frozen-lockfile
 
 # Rebuild the source code
 FROM base AS builder
@@ -17,7 +17,13 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-RUN corepack enable pnpm && pnpm run build
+RUN corepack enable pnpm && pnpm run build && pnpm prune --prod \
+    && rm -rf /app/.next/standalone/node_modules/typescript \
+    /app/.next/standalone/node_modules/.pnpm/typescript* \
+    /app/.next/standalone/node_modules/.pnpm/@img* \
+    /app/.next/standalone/node_modules/.pnpm/browserslist* \
+    /app/.next/standalone/node_modules/.pnpm/sharp* \
+    /app/.next/standalone/node_modules/.pnpm/update-browserslist-db*
 
 # Production image
 FROM base AS runner
@@ -29,7 +35,11 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder /app/.next/standalone/node_modules ./node_modules
+COPY --from=builder /app/.next/standalone/server.js ./server.js
+COPY --from=builder /app/.next/standalone/db ./db
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
