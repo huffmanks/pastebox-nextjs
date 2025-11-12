@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/empty";
 import { ItemGroup } from "@/components/ui/item";
 
+export const dynamic = "force-dynamic";
+
 export default async function BoxesPage() {
   const allBoxes = await db.query.boxes.findMany({
     with: { files: true },

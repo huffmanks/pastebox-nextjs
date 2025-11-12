@@ -1,23 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 
-import { PackageOpenIcon, PlusIcon } from "lucide-react";
+import { PackageIcon, PackageOpenIcon, PlusIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 export default function Header() {
-  const router = useRouter();
-  const pathname = usePathname();
-
-  function handleCreateNew() {
-    if (pathname !== "/") {
-      router.push("/");
-    }
-  }
-
   return (
     <>
       <header className="mx-auto max-w-5xl px-4 py-3">
@@ -28,22 +18,26 @@ export default function Header() {
             <h1>pastebox</h1>
             <PackageOpenIcon />
           </Link>
-          <div>
+          <div className="flex items-center gap-2">
             <Button
               aria-label="Create a new note"
-              className="hidden cursor-pointer sm:inline-flex"
+              className="size-9 cursor-pointer rounded-full sm:h-8 sm:w-auto sm:rounded-md"
               variant="outline"
               size="sm"
-              onClick={handleCreateNew}>
-              <PlusIcon /> <span>New</span>
+              asChild>
+              <Link href="/">
+                <PlusIcon /> <span className="hidden sm:inline-flex">New</span>
+              </Link>
             </Button>
             <Button
-              aria-label="Create a new note"
-              className="cursor-pointer rounded-full sm:hidden"
+              aria-label="View current boxes"
+              className="size-9 cursor-pointer rounded-full sm:h-8 sm:w-auto sm:rounded-md"
               variant="outline"
-              size="icon"
-              onClick={handleCreateNew}>
-              <PlusIcon />
+              size="sm"
+              asChild>
+              <Link href="/boxes">
+                <PackageIcon /> <span className="hidden sm:inline-flex">Boxes</span>
+              </Link>
             </Button>
           </div>
         </div>
