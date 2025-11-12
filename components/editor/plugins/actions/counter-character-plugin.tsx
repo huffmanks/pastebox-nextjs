@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $rootTextContent } from "@lexical/text";
 
+import { pluralize } from "@/lib/utils";
+
 let textEncoderInstance: null | TextEncoder = null;
 
 function textEncoder(): null | TextEncoder {
@@ -66,17 +68,18 @@ export function CounterCharacterPlugin({ charset = "UTF-16" }: CounterCharacterP
     });
   }, [editor, charset]);
 
+  const charactersString =
+    !stats?.characters || stats.characters === 0
+      ? "0 characters"
+      : `${stats.characters} ${pluralize("character", stats.characters)}`;
+
+  const wordsString = `${stats.words} ${pluralize("word", stats.words)}`;
+
   return (
     <div className="flex gap-2 text-xs whitespace-nowrap text-gray-500">
-      <p>
-        {!stats?.characters || stats.characters === 0
-          ? "0 characters"
-          : `${stats.characters} character${stats.characters > 1 ? "s" : ""}`}
-      </p>
-      |
-      <p>
-        {stats.words} word{stats.words > 1 || stats.words === 0 ? "s" : ""}
-      </p>
+      <span>{charactersString}</span>
+      <span>|</span>
+      <span>{wordsString}</span>
     </div>
   );
 }

@@ -34,3 +34,68 @@ export function formatBytes(bytes: number) {
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${(bytes / 1024 ** i).toFixed(i ? 1 : 0)} ${sizes[i]}`;
 }
+
+export function pluralize(word: string, length: number) {
+  if (length === 1) {
+    return word;
+  }
+
+  const lowerWord = word.toLowerCase();
+
+  if (
+    lowerWord.endsWith("y") &&
+    !["a", "e", "i", "o", "u"].includes(lowerWord.charAt(lowerWord.length - 2))
+  ) {
+    return `${word.slice(0, -1)}ies`;
+  }
+
+  if (lowerWord.endsWith("fe")) {
+    return `${word.slice(0, -2)}ves`;
+  }
+
+  if (lowerWord.endsWith("f") && !lowerWord.endsWith("ff")) {
+    return `${word.slice(0, -1)}ves`;
+  }
+
+  if (
+    lowerWord.endsWith("s") ||
+    lowerWord.endsWith("z") ||
+    lowerWord.endsWith("x") ||
+    lowerWord.endsWith("sh") ||
+    lowerWord.endsWith("ch")
+  ) {
+    return `${word}es`;
+  }
+
+  return `${word}s`;
+}
+
+export function countNoteElements<T extends object>(data: T) {
+  let count = 0;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const traverse = (obj: any) => {
+    if (typeof obj !== "object" || obj === null) {
+      return;
+    }
+
+    if (Array.isArray(obj)) {
+      for (const item of obj) {
+        traverse(item);
+      }
+    } else {
+      for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+          if (key === "text") {
+            count++;
+          }
+
+          traverse(obj[key]);
+        }
+      }
+    }
+  };
+
+  traverse(data);
+  return count;
+}

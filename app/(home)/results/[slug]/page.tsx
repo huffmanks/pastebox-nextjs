@@ -1,7 +1,10 @@
-import { PackageCheckIcon } from "lucide-react";
+import Link from "next/link";
+
+import { PackageCheckIcon, ViewIcon } from "lucide-react";
 
 import CopyInput from "@/components/copy-input";
 import ShareExportButtonGroup from "@/components/share-export-button-group";
+import { Button } from "@/components/ui/button";
 
 export default async function ResultsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -39,6 +42,15 @@ export default async function ResultsPage({ params }: { params: Promise<{ slug: 
               url={boxUrl}
               svg={svg.lightSvg}
             />
+            <Button
+              className="mt-4 w-full cursor-pointer"
+              aria-label="View your box."
+              asChild>
+              <Link href={boxUrl}>
+                <ViewIcon />
+                <span>View</span>
+              </Link>
+            </Button>
           </div>
         </div>
       )}

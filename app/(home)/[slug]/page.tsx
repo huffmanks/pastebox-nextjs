@@ -6,7 +6,7 @@ import { FileXIcon, NotebookIcon } from "lucide-react";
 
 import { db } from "@/db";
 import { boxes } from "@/db/schema";
-import { cn } from "@/lib/utils";
+import { cn, pluralize } from "@/lib/utils";
 
 import BoxUploadsList from "@/components/box-uploads-list";
 import DeleteBoxButton from "@/components/delete-box-button";
@@ -34,6 +34,9 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
   const hasNote = !!box?.content;
 
   const editorJson = hasNote ? (box.content as unknown as EditorState) : undefined;
+
+  const boxFilesLength = box.files.length;
+  const filesString = `${boxFilesLength} ${pluralize("file", boxFilesLength)} attached`;
 
   return (
     <>
@@ -63,12 +66,10 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
         </section>
 
         <section>
-          {box?.files && box.files.length ? (
+          {box?.files && boxFilesLength > 0 ? (
             <div className="mb-4">
-              {box.files.length > 1 && <DownloadAllButton id={box.id} />}
-              <div className="text-muted-foreground mb-2 text-sm">
-                {box.files.length} file{box.files.length > 1 ? "s" : ""} attached
-              </div>
+              {boxFilesLength > 1 && <DownloadAllButton id={box.id} />}
+              <div className="text-muted-foreground mb-2 text-sm">{filesString}</div>
               <BoxUploadsList files={box.files} />
             </div>
           ) : (
