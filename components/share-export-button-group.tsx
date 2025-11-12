@@ -1,11 +1,13 @@
 "use client";
 
 import { ChevronDownIcon, CopyIcon, FileCodeIcon, ImageIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 import { toast } from "sonner";
 
 import { useCopy } from "@/hooks/use-copy";
 import { downloadBase64File, downloadSvgFile, svgToBase64Png } from "@/lib/download";
 
+import ShareButton from "@/components/share-button";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
@@ -16,15 +18,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import ShareButton from "./share-button";
-
 interface Props {
   url: string;
-  svg: string;
+  svgs: {
+    darkSvg: string;
+    lightSvg: string;
+  };
 }
 
-export default function ShareExportButtonGroup({ url, svg }: Props) {
+export default function ShareExportButtonGroup({ url, svgs }: Props) {
   const { copy } = useCopy();
+  const { resolvedTheme } = useTheme();
+
+  const svg = resolvedTheme === "light" ? svgs.lightSvg : svgs.darkSvg;
 
   async function handleCopyQrCode() {
     try {

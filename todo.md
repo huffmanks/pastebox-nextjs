@@ -3,7 +3,6 @@
 1. Validate password on view.
 2. [pastebox view](<app/(home)/[slug]/page.tsx>)
    - [ ] Show expired time left.
-3. Results page qr code light mode
 
 ## Server
 

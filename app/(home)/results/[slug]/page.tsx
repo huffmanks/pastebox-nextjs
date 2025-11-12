@@ -16,7 +16,7 @@ export default async function ResultsPage({ params }: { params: Promise<{ slug: 
   const res = await fetch(`${baseUrl}/api/qr?box_url=${encodeURIComponent(boxUrl)}`, {
     cache: "no-store",
   });
-  const svg = await res.json();
+  const svgs = await res.json();
 
   return (
     <section className="mx-auto max-w-xl">
@@ -26,13 +26,23 @@ export default async function ResultsPage({ params }: { params: Promise<{ slug: 
 
       <CopyInput url={boxUrl} />
 
-      {svg && (
+      {svgs && (
         <div className="flex flex-col items-center gap-12 rounded-sm p-1 sm:flex-row sm:border sm:p-4">
           <div>
-            <div
-              className="w-115 max-w-[calc(100vw-1rem)] sm:-m-4 sm:size-64"
-              dangerouslySetInnerHTML={{ __html: svg.darkSvg }}
-            />
+            <>
+              <div
+                className="w-115 max-w-[calc(100vw-1rem)] overflow-hidden sm:-m-4 sm:size-64 sm:rounded-tl-sm sm:rounded-bl-sm dark:hidden"
+                dangerouslySetInnerHTML={{
+                  __html: svgs.lightSvg,
+                }}
+              />
+              <div
+                className="hidden w-115 max-w-[calc(100vw-1rem)] overflow-hidden sm:-m-4 sm:size-64 sm:rounded-tl-sm sm:rounded-bl-sm dark:block"
+                dangerouslySetInnerHTML={{
+                  __html: svgs.darkSvg,
+                }}
+              />
+            </>
           </div>
           <div className="-order-1 w-full sm:order-1">
             <h2 className="mb-1 text-lg font-medium">View the box anywhere</h2>
@@ -40,7 +50,7 @@ export default async function ResultsPage({ params }: { params: Promise<{ slug: 
 
             <ShareExportButtonGroup
               url={boxUrl}
-              svg={svg.lightSvg}
+              svgs={svgs}
             />
             <Button
               className="mt-4 w-full cursor-pointer"
