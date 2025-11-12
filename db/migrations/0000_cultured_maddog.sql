@@ -13,6 +13,7 @@ CREATE TABLE "files" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"box_id" uuid NOT NULL,
 	"name" text NOT NULL,
+	"original_name" text NOT NULL,
 	"type" text NOT NULL,
 	"size" integer NOT NULL,
 	"path" text NOT NULL,

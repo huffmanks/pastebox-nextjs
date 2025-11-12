@@ -93,10 +93,8 @@ export function Plugins({ isReadOnly = false }: { isReadOnly?: boolean }) {
       <div className="relative">
         <RichTextPlugin
           contentEditable={
-            <div className="">
-              <div
-                className=""
-                ref={onRef}>
+            <div>
+              <div ref={onRef}>
                 <ContentEditable placeholder={"Start typing ..."} />
               </div>
             </div>

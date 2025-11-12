@@ -18,6 +18,7 @@ export default function CopyInput({ url }: { url: string }) {
   async function copyToClipboard() {
     try {
       await copy(url);
+      toast.success("Link copied to clipboard.");
     } catch (_error) {
       toast.error("Copying failed.");
     }

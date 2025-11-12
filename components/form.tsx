@@ -10,7 +10,9 @@ import slugify from "slugify";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { createBox } from "@/actions/box";
 import { SLUG_OPTIONS } from "@/lib/constants";
+import { castError } from "@/lib/utils";
 
 import { Editor } from "@/components/editor/blocks/editor";
 import { Button } from "@/components/ui/button";
@@ -44,12 +46,6 @@ const _formSchema = z.object({
 });
 
 type FormSchema = z.infer<typeof _formSchema>;
-
-type FormResponse = {
-  id: string;
-  slug: string;
-  expiresAt: string;
-};
 
 export default function Form() {
   const [formState, setFormState] = useState<FormSchema>({
@@ -101,18 +97,17 @@ export default function Form() {
     }
 
     try {
-      const res = await fetch("/api/box", { method: "POST", body: formData });
-      if (!res.ok) {
-        const text = await res.text();
-        toast.error(`Upload failed: ${text}`);
-        return;
+      const createdBox = await createBox(formData);
+
+      if (typeof createdBox !== "object" || !createdBox) {
+        return castError("Failed to create box.");
       }
 
-      const data: FormResponse = await res.json();
+      router.push(`/results/${createdBox.slug}`);
+    } catch (error) {
+      const message = typeof error === "string" ? error : "Something went wrong!";
 
-      router.push(`/results/${data.slug}`);
-    } catch (_error) {
-      toast.error("Something went wrong!");
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

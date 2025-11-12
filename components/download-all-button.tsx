@@ -9,8 +9,10 @@ export default function DownloadAllButton({ id }: { id: string }) {
   async function handleDownloadAll() {
     try {
       window.location.href = `/api/box/${id}/download`;
+
+      toast.success("Files have been downloaded.");
     } catch (_error) {
-      toast.error("Download failed");
+      toast.error("Download failed!");
     }
   }
 

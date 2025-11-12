@@ -38,7 +38,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange>
           <Header />
-          <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+          <main className="mx-auto mb-8 max-w-5xl px-4 py-8">{children}</main>
           <Toaster richColors />
         </ThemeProvider>
       </body>

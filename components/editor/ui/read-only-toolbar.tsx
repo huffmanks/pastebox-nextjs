@@ -29,6 +29,8 @@ export default function ReadOnlyToolbar({ slug }: { slug: string }) {
       });
 
       await copy([item]);
+
+      toast.success("Note copied to clipboard.");
     } catch (_error) {
       toast.error("Copy failed.");
     }

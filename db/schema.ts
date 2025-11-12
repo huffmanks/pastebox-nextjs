@@ -17,6 +17,7 @@ export const files = pgTable("files", {
     .notNull()
     .references(() => boxes.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
+  originalName: text("original_name").notNull(),
   type: text("type").notNull(),
   size: integer("size").notNull(),
   path: text("path").notNull(),

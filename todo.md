@@ -3,6 +3,12 @@
 1. Validate password on view.
 2. [pastebox view](<app/(home)/[slug]/page.tsx>)
    - [ ] Show expired time left.
+3. Rich text editor
+   - [ ] Fix speech to text error.
+   - [ ] Copying rich text fails on mobile.
+   - [ ] Creating a link on mobile is buggy.
+4. Results page
+   - [ ] Share button doesn't work on mobile.
 
 ## Server
 

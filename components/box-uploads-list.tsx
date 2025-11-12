@@ -27,7 +27,7 @@ export default function BoxUploadsList({ files }: Props) {
             <ItemMetadata file={file} />
             <DownloadButton
               filePath={file.path}
-              fileName={file.name}
+              originalFileName={file.originalName}
             />
           </div>
         ))}
@@ -70,7 +70,13 @@ function ItemMetadata({ file }: { file: FileSelect }) {
   );
 }
 
-function DownloadButton({ filePath, fileName }: { filePath: string; fileName: string }) {
+function DownloadButton({
+  filePath,
+  originalFileName,
+}: {
+  filePath: string;
+  originalFileName: string;
+}) {
   async function handleDownload() {
     try {
       const fileUrl = `/api${filePath}`;
@@ -78,7 +84,8 @@ function DownloadButton({ filePath, fileName }: { filePath: string; fileName: st
 
       const blob = await res.blob();
 
-      downloadBlobFile({ blob, fileName });
+      downloadBlobFile({ blob, fileName: originalFileName });
+      toast.success(`${originalFileName} has been downloaded.`);
     } catch (_error) {
       toast.error("Download failed");
     }

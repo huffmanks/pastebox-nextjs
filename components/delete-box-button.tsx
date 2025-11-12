@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 
 import { TrashIcon } from "lucide-react";
+import { toast } from "sonner";
 
 import { deleteBox } from "@/actions/box";
 
@@ -22,6 +23,8 @@ import { Button } from "@/components/ui/button";
 export default function DeleteBoxButton({ boxId }: { boxId: string }) {
   async function handleDeleteBox() {
     await deleteBox(boxId);
+
+    toast.error("Box has been deleted.");
     redirect("/");
   }
 
