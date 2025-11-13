@@ -63,7 +63,7 @@ function ItemMetadata({ file }: { file: FileSelect }) {
   return (
     <div className="flex w-0 min-w-0 flex-1 flex-col">
       <>
-        <span className="truncate text-sm font-medium">{file.name}</span>
+        <span className="truncate text-sm font-medium">{file.originalName}</span>
         <span className="text-muted-foreground text-xs">{formatBytes(file.size)}</span>
       </>
     </div>
