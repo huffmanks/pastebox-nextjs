@@ -11,45 +11,9 @@ services:
       - uploads:/app/uploads
     environment:
       NODE_ENV: production
-      DATABASE_HOST: ${DATABASE_HOST}
-      DATABASE_USER: ${DATABASE_USER}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_PORT: ${DATABASE_PORT}
       DATABASE_URL: ${DATABASE_URL}
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
-    depends_on:
-      db:
-        condition: service_healthy
     restart: unless-stopped
-    networks:
-      - pastebox_net
-
-  db:
-    image: postgres:17-alpine
-    restart: unless-stopped
-    container_name: pastebox_db
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_DB: ${DATABASE_NAME}
-    volumes:
-      - pgdata_prod:/var/lib/postgresql/data
-    networks:
-      - pastebox_net
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 5s
-
-networks:
-  pastebox_net:
-    driver: bridge
 
 volumes:
-  pgdata_prod:
   uploads:

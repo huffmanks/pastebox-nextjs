@@ -21,6 +21,7 @@
 /build
 /uploads
 /public/uploads
+/db/db.sqlite
 
 # misc
 .DS_Store

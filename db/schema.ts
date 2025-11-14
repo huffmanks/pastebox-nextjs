@@ -1,19 +1,26 @@
-import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
-import { boolean, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { createId } from "@paralleldrive/cuid2";
+import { InferInsertModel, InferSelectModel, relations, sql } from "drizzle-orm";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const boxes = pgTable("boxes", {
-  id: uuid("id").primaryKey().defaultRandom(),
+export const boxes = sqliteTable("boxes", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => createId()),
   slug: text("slug").notNull().unique(),
   content: text("content"),
   password: text("password"),
-  isProtected: boolean("is_protected").default(false).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  isProtected: integer("is_protected", { mode: "boolean" }).default(false).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .notNull(),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
 });
 
-export const files = pgTable("files", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  boxId: uuid("box_id")
+export const files = sqliteTable("files", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  boxId: text("box_id")
     .notNull()
     .references(() => boxes.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
@@ -21,7 +28,9 @@ export const files = pgTable("files", {
   type: text("type").notNull(),
   size: integer("size").notNull(),
   path: text("path").notNull(),
-  uploadedAt: timestamp("uploaded_at", { withTimezone: true }).defaultNow().notNull(),
+  uploadedAt: integer("uploaded_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .notNull(),
 });
 
 export const boxesRelations = relations(boxes, ({ many }) => ({
