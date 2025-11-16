@@ -1,4 +1,6 @@
-const config = {
+import { NextConfig } from "next";
+
+const config: NextConfig = {
   images: {
     unoptimized: true,
   },

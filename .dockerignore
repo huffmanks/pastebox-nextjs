@@ -47,4 +47,5 @@ example.env
 *.pfx
 *.jks
 *.sqlite3
+*.sqlite
 *.db

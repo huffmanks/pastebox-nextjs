@@ -20,8 +20,9 @@
 # production
 /build
 /uploads
-/public/uploads
-/db/db.sqlite
+*.sqlite
+*.db
+data
 
 # misc
 .DS_Store
