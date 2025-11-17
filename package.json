@@ -13,7 +13,7 @@
     "db:push:prod": "rm -rf data && mkdir -p data && drizzle-kit push --force",
     "db:migrate": "NODE_ENV=development dotenv -e .env.local -- drizzle-kit migrate",
     "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
-    "docker:build": "pnpm run db:push:prod && docker compose build --no-cache",
+    "docker:build": "pnpm run db:push:prod && docker compose build --no-cache && rm -rf data",
     "docker:up": "docker compose up -d"
   },
   "dependencies": {

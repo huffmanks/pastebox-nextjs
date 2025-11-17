@@ -1,8 +1,10 @@
 import Link from "next/link";
 
+import { gt } from "drizzle-orm";
 import { PackagePlusIcon, PackageXIcon } from "lucide-react";
 
 import { db } from "@/db";
+import { boxes } from "@/db/schema";
 
 import BoxItem from "@/components/box-item";
 import { Button } from "@/components/ui/button";
@@ -20,6 +22,7 @@ export const dynamic = "force-dynamic";
 
 export default async function BoxesPage() {
   const allBoxes = await db.query.boxes.findMany({
+    where: gt(boxes.expiresAt, new Date()),
     with: { files: true },
   });
 

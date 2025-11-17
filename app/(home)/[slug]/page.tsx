@@ -4,10 +4,12 @@ import { eq } from "drizzle-orm";
 import { EditorState } from "lexical";
 import { FileXIcon, NotebookIcon } from "lucide-react";
 
+import { deleteBox } from "@/actions/box";
 import { db } from "@/db";
 import { boxes } from "@/db/schema";
 import { cn, pluralize } from "@/lib/utils";
 
+import AlertCountdown from "@/components/alert-countdown";
 import BoxUploadsList from "@/components/box-uploads-list";
 import DeleteBoxButton from "@/components/delete-box-button";
 import DownloadAllButton from "@/components/download-all-button";
@@ -29,7 +31,20 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
     with: { files: true },
   });
 
-  if (!box) notFound();
+  if (!box) {
+    notFound();
+  }
+
+  const currentTime = new Date().getTime();
+  const isExpired = box.expiresAt.getTime() < currentTime;
+
+  if (isExpired) {
+    await deleteBox(box.id);
+
+    notFound();
+  }
+
+  const timeLeftMs = box.expiresAt.getTime() - currentTime;
 
   const hasNote = !!box?.content;
 
@@ -40,6 +55,8 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <>
+      <AlertCountdown timeLeftMs={timeLeftMs} />
+
       <div
         className={cn(
           "grid grid-cols-1 gap-8",

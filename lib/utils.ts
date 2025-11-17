@@ -99,3 +99,33 @@ export function countNoteElements<T extends object>(data: T) {
   traverse(data);
   return count;
 }
+
+export function getRelativeTimeLeft(msLeft: number): string {
+  if (msLeft <= 0) return "Time has expired";
+
+  const SECOND = 1000;
+  const MINUTE = 60 * SECOND;
+  const HOUR = 60 * MINUTE;
+  const DAY = 24 * HOUR;
+
+  let diffMs = msLeft;
+
+  const days = Math.floor(diffMs / DAY);
+  diffMs -= days * DAY;
+
+  const hours = Math.floor(diffMs / HOUR);
+  diffMs -= hours * HOUR;
+
+  const minutes = Math.floor(diffMs / MINUTE);
+  diffMs -= minutes * MINUTE;
+
+  const seconds = Math.floor(diffMs / SECOND);
+
+  const parts: string[] = [];
+  if (days > 0) parts.push(`${days}d`);
+  if (hours > 0) parts.push(`${hours}h`);
+  if (minutes > 0) parts.push(`${minutes}m`);
+  if (seconds > 0) parts.push(`${seconds}s`);
+
+  return `${parts.join(" ")} left`;
+}
