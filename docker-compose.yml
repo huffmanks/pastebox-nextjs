@@ -9,7 +9,7 @@ services:
       - "3000:3000"
     volumes:
       - uploads:/app/uploads
-      - ./data:/app/data
+      - data:/app/data
     environment:
       NODE_ENV: production
       DATABASE_URL: ${DATABASE_URL}
@@ -18,3 +18,4 @@ services:
 
 volumes:
   uploads:
+  data:

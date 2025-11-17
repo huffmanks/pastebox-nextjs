@@ -38,14 +38,12 @@ RUN adduser --system --uid 1001 nextjs
 
 RUN mkdir -p /app/uploads \
     && chown -R nextjs:nodejs /app/uploads \
-    && chmod -R 775 /app/uploads \
-    && mkdir -p /app/data \
-    && chown -R nextjs:nodejs /app/data \
-    && chmod -R 775 /app/data
+    && chmod -R 775 /app/uploads
 
 COPY --from=builder /app/.next/standalone/node_modules ./node_modules
 COPY --from=builder /app/.next/standalone/server.js ./server.js
 
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/data ./data
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
