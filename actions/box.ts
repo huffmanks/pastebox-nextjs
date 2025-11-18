@@ -84,6 +84,12 @@ export async function createBox(formData: FormData): CreateBoxReturn {
   }
 }
 
+export async function updateBoxExpiresAt(boxId: string, ms: number) {
+  const expiresAt = new Date(Date.now() + (ms / 1000) * 1000);
+
+  await db.update(boxes).set({ expiresAt }).where(eq(boxes.id, boxId));
+}
+
 export async function deleteBox(boxId: string) {
   try {
     await db.transaction(async (tx) => {

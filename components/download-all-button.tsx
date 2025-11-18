@@ -18,6 +18,7 @@ export default function DownloadAllButton({ id }: { id: string }) {
 
   return (
     <Button
+      variant="secondary"
       className="mb-4 w-full cursor-pointer"
       onClick={handleDownloadAll}>
       <CloudDownloadIcon />

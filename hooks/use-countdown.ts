@@ -37,22 +37,23 @@ export function useCountdown({
     (resetValue?: number) => {
       stopCountdown();
       resetCounter(resetValue);
+      startCountdown();
     },
-    [stopCountdown, resetCounter]
+    [startCountdown, stopCountdown, resetCounter]
   );
 
   const countdownCallback = useCallback(() => {
-    if (count === countStop) {
+    if (count <= countStop) {
       stopCountdown();
       return;
     }
 
     if (isIncrement) {
-      increment();
+      increment(intervalMs);
     } else {
-      decrement();
+      decrement(intervalMs);
     }
-  }, [count, countStop, decrement, increment, isIncrement, stopCountdown]);
+  }, [count, countStop, decrement, increment, intervalMs, isIncrement, stopCountdown]);
 
   useInterval(countdownCallback, isCountdownRunning ? intervalMs : null);
 

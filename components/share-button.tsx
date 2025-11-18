@@ -29,7 +29,7 @@ export default function ShareButton({ url }: Props) {
 
   return (
     <Button
-      variant="outline"
+      variant="secondary"
       className="w-full cursor-pointer"
       aria-label="Share your box."
       onClick={shareNote}>

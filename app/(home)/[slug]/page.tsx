@@ -55,14 +55,17 @@ export default async function BoxPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <>
-      <AlertCountdown timeLeftMs={timeLeftMs} />
-
       <div
         className={cn(
           "grid grid-cols-1 gap-8",
           hasNote ? "md:grid-cols-[3fr_1.25fr]" : "md:grid-cols-[1.5fr_1fr]"
         )}>
         <section>
+          <AlertCountdown
+            boxId={box.id}
+            timeLeftMs={timeLeftMs}
+          />
+
           {hasNote ? (
             <Editor
               slug={box.slug}

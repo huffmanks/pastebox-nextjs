@@ -125,7 +125,7 @@ export function getRelativeTimeLeft(msLeft: number): string {
   if (days > 0) parts.push(`${days}d`);
   if (hours > 0) parts.push(`${hours}h`);
   if (minutes > 0) parts.push(`${minutes}m`);
-  if (seconds > 0) parts.push(`${seconds}s`);
+  if (parts.length < 1 && seconds > 0) return "Less than a minute left";
 
   return `${parts.join(" ")} left`;
 }

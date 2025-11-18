@@ -7,23 +7,23 @@ import { getRelativeTimeLeft } from "@/lib/utils";
 type UseCounterReturn = {
   count: number;
   prettyCount: string;
-  increment: () => void;
-  decrement: () => void;
+  increment: (amt: number) => void;
+  decrement: (amt: number) => void;
   reset: (resetValue?: number) => void;
   setCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export function useCounter(initialValue?: number): UseCounterReturn {
-  const [count, setCount] = React.useState(initialValue ?? 0);
+  const safeInitial = initialValue ?? 0;
+  const [count, setCount] = React.useState(safeInitial);
+  const [prettyCount, setPrettyCount] = React.useState(getRelativeTimeLeft(safeInitial));
 
-  const prettyCount = React.useMemo(() => getRelativeTimeLeft(count), [count]);
-
-  const increment = React.useCallback(() => {
-    setCount((x) => x + 1);
+  const increment = React.useCallback((amt = 1) => {
+    setCount((x) => x + amt);
   }, []);
 
-  const decrement = React.useCallback(() => {
-    setCount((x) => x - 1);
+  const decrement = React.useCallback((amt = 1) => {
+    setCount((x) => x - amt);
   }, []);
 
   const reset = React.useCallback(
@@ -33,6 +33,10 @@ export function useCounter(initialValue?: number): UseCounterReturn {
     },
     [initialValue]
   );
+
+  React.useEffect(() => {
+    setPrettyCount(getRelativeTimeLeft(count));
+  }, [count]);
 
   return {
     count,
