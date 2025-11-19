@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 
-import { ExternalLinkIcon } from "lucide-react";
+import { ExternalLinkIcon, LockIcon } from "lucide-react";
 
-import { BoxSelect, FileSelect } from "@/db/schema";
-import { countNoteElements, pluralize } from "@/lib/utils";
+import { countNoteElements, getRelativeTimeLeft, pluralize } from "@/lib/utils";
+import { BoxWithFiles } from "@/types";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -18,11 +19,7 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 
-type BoxItemWithFiles = BoxSelect & {
-  files?: FileSelect[];
-};
-
-export default function BoxItem({ box }: { box: BoxItemWithFiles }) {
+export default function BoxItem({ box }: { box: BoxWithFiles }) {
   const filesLength = box?.files?.length ?? 0;
 
   function generateNotesString() {
@@ -39,6 +36,7 @@ export default function BoxItem({ box }: { box: BoxItemWithFiles }) {
     return `Attachments: ${filesLength} ${pluralize("file", filesLength)}`;
   }
 
+  const expiresAt = getRelativeTimeLeft(box.expiresAt.getTime() - new Date().getTime());
   const notesString = generateNotesString();
   const filesString = generateFilesString();
 
@@ -50,7 +48,21 @@ export default function BoxItem({ box }: { box: BoxItemWithFiles }) {
         </Avatar>
       </ItemMedia>
       <ItemContent className="gap-1">
-        <ItemTitle>{box.slug}</ItemTitle>
+        <ItemTitle className="flex-wrap gap-1">
+          {box.isProtected && (
+            <Badge
+              variant="secondary"
+              size="icon">
+              <LockIcon />
+            </Badge>
+          )}
+          <span>{box.slug}</span>
+          <Badge
+            className="ml-1"
+            variant="destructive">
+            {expiresAt}
+          </Badge>
+        </ItemTitle>
         <ItemDescription>
           <span>{notesString}</span>
           <span> — </span>

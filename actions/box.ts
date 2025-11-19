@@ -85,9 +85,27 @@ export async function createBox(formData: FormData): CreateBoxReturn {
 }
 
 export async function updateBoxExpiresAt(boxId: string, ms: number) {
-  const expiresAt = new Date(Date.now() + (ms / 1000) * 1000);
+  try {
+    const expiresAt = new Date(Date.now() + (ms / 1000) * 1000);
 
-  await db.update(boxes).set({ expiresAt }).where(eq(boxes.id, boxId));
+    await db.update(boxes).set({ expiresAt }).where(eq(boxes.id, boxId));
+  } catch (_error) {
+    console.warn("Error updating box expiresAt.");
+  }
+}
+
+export async function validatePassword(boxId: string, boxPassword: string) {
+  try {
+    const [box] = await db.select().from(boxes).where(eq(boxes.id, boxId));
+
+    if (!box) throw new Error("Invalid password");
+
+    if (box.password !== boxPassword) throw new Error("Invalid password");
+
+    return true;
+  } catch (_error) {
+    console.warn("Error validating password.");
+  }
 }
 
 export async function deleteBox(boxId: string) {

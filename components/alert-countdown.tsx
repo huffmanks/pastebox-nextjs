@@ -26,8 +26,6 @@ export default function AlertCountdown({
     intervalMs: 1000 * 60,
   });
 
-  console.log(count);
-
   async function handleExtendExpiresAt() {
     await updateBoxExpiresAt(boxId, EXPIRY_TIME - 1);
     resetCountdown(EXPIRY_TIME - 1);
@@ -69,7 +67,7 @@ export default function AlertCountdown({
             </div>
             <HoverCardContent>
               <p className="text-sm">
-                Your box will be deleted when time expires. Extend to refresh the 24-hour timer.
+                Your box will be deleted when time expires. Extend to reset the time to 24 hours.
               </p>
             </HoverCardContent>
           </HoverCard>

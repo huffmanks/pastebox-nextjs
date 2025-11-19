@@ -10,8 +10,8 @@ const config = {
   importOrder: [
     "^(react|next?/?([a-zA-Z/]*))$",
     "<THIRD_PARTY_MODULES>",
-    "^@/(?!components)(.*)$",
-    "^@/components/(.*)$",
+    "^@/(?!(components|app))(.*)$",
+    "^@/(components|app)/(.*)$",
     "^[./]",
   ],
   importOrderSeparation: true,
