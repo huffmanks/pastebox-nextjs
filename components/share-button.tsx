@@ -22,8 +22,8 @@ export default function ShareButton({ url }: Props) {
       if (navigator.canShare && navigator.canShare(shareData)) {
         await navigator.share(shareData);
       }
-    } catch (error) {
-      console.error("Error sharing:", error);
+    } catch (_error) {
+      console.warn("Sharing failed.");
     }
   }
 

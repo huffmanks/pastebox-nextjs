@@ -1,17 +1,16 @@
 "use server";
 
+import { randomBytes, scryptSync, timingSafeEqual } from "crypto";
 import { eq, inArray } from "drizzle-orm";
 import fs from "node:fs/promises";
 import path from "node:path";
 
 import { db } from "@/db";
-import { BoxInsert, boxes, files } from "@/db/schema";
+import { boxes, files } from "@/db/schema";
 import { EXPIRY_TIME, UPLOADS_DIR } from "@/lib/constants";
 import { getFormString } from "@/lib/utils";
 
-export type CreateBoxReturn = Promise<Pick<BoxInsert, "id" | "slug" | "expiresAt"> | string>;
-
-export async function createBox(formData: FormData): CreateBoxReturn {
+export async function createBox(formData: FormData) {
   try {
     try {
       await fs.access(UPLOADS_DIR);
@@ -24,37 +23,33 @@ export async function createBox(formData: FormData): CreateBoxReturn {
 
     const slug = getFormString("slug", formData);
 
-    if (!slug || typeof slug !== "string") return "Missing slug." as string;
+    if (!slug || typeof slug !== "string") throw new Error("Missing slug.");
 
     const existing = await db.select().from(boxes).where(eq(boxes.slug, slug)).limit(1);
 
-    if (existing.length > 0) {
-      return "Slug already exists.";
-    }
+    if (existing.length > 0) throw new Error("Slug already exists.");
 
     const content = getFormString("content", formData);
     const password = getFormString("password", formData);
     const isProtected = Boolean(formData.get("isProtected"));
     const uploadedFiles = formData.getAll("files").filter((f): f is File => f instanceof File);
 
-    if (!content && uploadedFiles.length === 0) {
-      return "Must provide a note or at least one file.";
-    }
+    if (!content && uploadedFiles.length === 0)
+      throw new Error("Must provide a note or at least one file.");
 
     const [createdBox] = await db
       .insert(boxes)
       .values({
         slug,
         content,
-        password: isProtected ? password : null,
+        password: isProtected && password ? hashPassword(password) : null,
         isProtected,
         expiresAt,
       })
       .returning({ id: boxes.id, slug: boxes.slug, expiresAt: boxes.expiresAt });
 
-    if (!createdBox) {
-      return "Failed to create box.";
-    }
+    if (!createdBox) throw new Error("Failed to create box.");
+
     const boxId = createdBox.id;
 
     if (uploadedFiles.length > 0) {
@@ -80,7 +75,7 @@ export async function createBox(formData: FormData): CreateBoxReturn {
 
     return createdBox;
   } catch (_error) {
-    return "Something went wrong!";
+    console.error("Creating the box failed.");
   }
 }
 
@@ -90,7 +85,7 @@ export async function updateBoxExpiresAt(boxId: string, ms: number) {
 
     await db.update(boxes).set({ expiresAt }).where(eq(boxes.id, boxId));
   } catch (_error) {
-    console.warn("Error updating box expiresAt.");
+    console.error("Error updating box expiresAt.");
   }
 }
 
@@ -98,13 +93,15 @@ export async function validatePassword(boxId: string, boxPassword: string) {
   try {
     const [box] = await db.select().from(boxes).where(eq(boxes.id, boxId));
 
-    if (!box) throw new Error("Invalid password");
+    if (!box || !box.password) throw new Error("Invalid password.");
 
-    if (box.password !== boxPassword) throw new Error("Invalid password");
+    const ok = verifyPassword(boxPassword, box.password);
+
+    if (!ok) throw new Error("Invalid password.");
 
     return true;
   } catch (_error) {
-    console.warn("Error validating password.");
+    console.warn("Invalid password.");
   }
 }
 
@@ -116,7 +113,7 @@ export async function deleteBox(boxId: string) {
         with: { files: true },
       });
 
-      if (!found) return;
+      if (!found) throw new Error("Box doesn't exist.");
 
       if (found.files.length > 0) {
         await Promise.all(
@@ -140,7 +137,21 @@ export async function deleteBox(boxId: string) {
 
       await tx.delete(boxes).where(eq(boxes.id, boxId));
     });
-  } catch (error) {
-    console.warn("Deleting box failed:", error);
+  } catch (_error) {
+    console.error("Deleting box failed.");
   }
+}
+
+function hashPassword(password: string) {
+  const salt = randomBytes(16);
+  const hash = scryptSync(password, salt, 64);
+  return `${salt.toString("hex")}:${hash.toString("hex")}`;
+}
+
+function verifyPassword(password: string, stored: string) {
+  const [saltHex, hashHex] = stored.split(":");
+  const salt = Buffer.from(saltHex, "hex");
+  const hash = Buffer.from(hashHex, "hex");
+  const newHash = scryptSync(password, salt, hash.length);
+  return timingSafeEqual(hash, newHash);
 }

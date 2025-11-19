@@ -37,12 +37,12 @@ export default function UnlockBoxForm({ boxId, setIsProtected }: UnlockBoxFormPr
       await validatePassword(boxId, password);
 
       const ok = await validatePassword(boxId, password);
-      if (!ok) throw new Error("Invalid password");
+      if (!ok) throw new Error("Invalid password.");
 
       setOpen(false);
       setIsProtected(false);
     } catch (_error) {
-      console.log("catch error");
+      console.warn("Invalid password.");
       setError(true);
     } finally {
       setIsSubmitting(false);

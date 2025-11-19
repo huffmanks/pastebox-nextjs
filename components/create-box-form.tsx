@@ -12,7 +12,6 @@ import { z } from "zod";
 
 import { createBox } from "@/actions/box";
 import { SLUG_OPTIONS } from "@/lib/constants";
-import { castError } from "@/lib/utils";
 
 import { Editor } from "@/components/editor/blocks/editor";
 import { Button } from "@/components/ui/button";
@@ -99,14 +98,12 @@ export default function Form() {
     try {
       const createdBox = await createBox(formData);
 
-      if (typeof createdBox !== "object" || !createdBox) {
-        return castError("Failed to create box.");
-      }
+      if (typeof createdBox !== "object" || !createdBox) throw new Error("Failed to create box.");
 
       router.push(`/results/${createdBox.slug}`);
     } catch (error) {
-      const message = typeof error === "string" ? error : "Something went wrong!";
-
+      const message = typeof error === "string" ? error : "Failed to create box.";
+      console.error(message);
       toast.error(message);
     } finally {
       setIsSubmitting(false);

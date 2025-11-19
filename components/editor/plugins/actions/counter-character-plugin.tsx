@@ -25,7 +25,6 @@ function utf8Length(text: string) {
   const currentTextEncoder = textEncoder();
 
   if (currentTextEncoder === null) {
-    // http://stackoverflow.com/a/5515960/210370
     const m = encodeURIComponent(text).match(/%[89ABab]/g);
     return text.length + (m ? m.length : 0);
   }

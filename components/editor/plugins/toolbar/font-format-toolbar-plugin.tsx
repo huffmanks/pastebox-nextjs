@@ -34,7 +34,6 @@ export function FontFormatToolbarPlugin() {
         }
       });
       setActiveFormats((prev) => {
-        // Only update if formats have changed
         if (prev.length !== formats.length || !formats.every((f) => prev.includes(f))) {
           return formats;
         }
