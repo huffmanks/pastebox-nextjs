@@ -1,12 +1,5 @@
 "use client";
 
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
 import { type Dispatch, type JSX, useCallback, useEffect, useRef, useState } from "react";
 
 import { $createLinkNode, $isAutoLinkNode, $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
@@ -26,7 +19,7 @@ import {
   type LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
-import { Check, Pencil, Trash, X } from "lucide-react";
+import { CheckIcon, PencilIcon, TrashIcon, XIcon } from "lucide-react";
 import { createPortal } from "react-dom";
 
 import { getSelectedNode } from "@/components/editor/utils/get-selected-node";
@@ -83,6 +76,12 @@ function FloatingLinkEditor({
 
     const rootElement = editor.getRootElement();
 
+    const isActiveInsideFloating =
+      activeElement &&
+      (activeElement.classList?.contains("link-input") ||
+        editorRef.current?.contains(activeElement) ||
+        anchorElem?.contains(activeElement));
+
     if (
       selection !== null &&
       nativeSelection !== null &&
@@ -94,11 +93,10 @@ function FloatingLinkEditor({
         nativeSelection.focusNode?.parentElement?.getBoundingClientRect();
       if (domRect) {
         domRect.y += 40;
-        // here
         setFloatingElemPositionForLinkEditor(domRect, editorElem, anchorElem);
       }
       setLastSelection(selection);
-    } else if (!activeElement || activeElement.className !== "link-input") {
+    } else if (!isActiveInsideFloating) {
       if (rootElement !== null) {
         setFloatingElemPositionForLinkEditor(null, editorElem, anchorElem);
       }
@@ -228,19 +226,21 @@ function FloatingLinkEditor({
             type="button"
             size="icon"
             variant="ghost"
+            onPointerDown={(e) => e.preventDefault()}
             onClick={() => {
               setIsLinkEditMode(false);
               setIsLink(false);
             }}
             className="shrink-0">
-            <X className="h-4 w-4" />
+            <XIcon className="h-4 w-4" />
           </Button>
           <Button
             type="button"
             size="icon"
+            onPointerDown={(e) => e.preventDefault()}
             onClick={handleLinkSubmission}
             className="shrink-0">
-            <Check className="h-4 w-4" />
+            <CheckIcon className="h-4 w-4" />
           </Button>
         </div>
       ) : (
@@ -251,20 +251,22 @@ function FloatingLinkEditor({
               type="button"
               size="icon"
               variant="ghost"
+              onPointerDown={(e) => e.preventDefault()}
               onClick={() => {
                 setEditedLinkUrl(linkUrl);
                 setIsLinkEditMode(true);
               }}>
-              <Pencil className="h-4 w-4" />
+              <PencilIcon className="h-4 w-4" />
             </Button>
             <Button
               type="button"
               size="icon"
               variant="ghost"
+              onPointerDown={(e) => e.preventDefault()}
               onClick={() => {
                 editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
               }}>
-              <Trash className="h-4 w-4" />
+              <TrashIcon className="h-4 w-4" />
             </Button>
           </div>
         </div>

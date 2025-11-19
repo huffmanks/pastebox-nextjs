@@ -58,6 +58,8 @@ export default function UnlockBoxForm({ boxId, setIsProtected }: UnlockBoxFormPr
         </DialogDescription>
         <DialogContent showCloseButton={false}>
           <form
+            id="unlock-box-form"
+            name="unlock-box-form"
             className="max-w-md"
             autoComplete="off"
             onFocus={() => setError(false)}

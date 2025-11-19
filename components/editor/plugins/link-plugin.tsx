@@ -4,7 +4,6 @@ import Link from "next/link";
 import { type JSX, useEffect, useState } from "react";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-// import { OPEN_URL_COMMAND } from "@lexical/commands";
 import { LinkPlugin as LexicalLinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 
 import { validateUrl } from "@/components/editor/utils/url";
@@ -83,7 +82,7 @@ export function LinkPlugin(): JSX.Element {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <LexicalLinkPlugin validateUrl={validateUrl} />;
+      <LexicalLinkPlugin validateUrl={validateUrl} />
     </>
   );
 }

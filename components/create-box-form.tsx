@@ -113,6 +113,8 @@ export default function Form() {
   return (
     <div className="w-full">
       <form
+        id="create-box-form"
+        name="create-box-form"
         className="grid grid-cols-1 gap-8 md:grid-cols-[3fr_1.25fr]"
         autoComplete="off"
         onFocus={() => setErrors({})}
@@ -121,7 +123,9 @@ export default function Form() {
           <Field
             className="gap-1.5"
             data-invalid={errors.content}>
-            <FieldLabel htmlFor="content">Note</FieldLabel>
+            <FieldLabel asChild>
+              <p>Note</p>
+            </FieldLabel>
             <Editor
               setContent={(content) => updateForm({ content })}
               aria-invalid={errors.content}
