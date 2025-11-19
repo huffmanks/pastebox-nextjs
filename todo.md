@@ -1,6 +1,4 @@
 ## Client
 
 1. Rich text editor
-   - [ ] Fix speech to text error.
-   - [ ] Copying rich text fails on mobile.
-   - [ ] Creating a link on mobile is buggy.
+   - [ ] When adding a link if keyboard is dismissed, the floating link editor plugin will not work and gets dismissed if clicked.

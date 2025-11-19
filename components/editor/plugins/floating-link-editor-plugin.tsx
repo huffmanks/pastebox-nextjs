@@ -94,6 +94,7 @@ function FloatingLinkEditor({
         nativeSelection.focusNode?.parentElement?.getBoundingClientRect();
       if (domRect) {
         domRect.y += 40;
+        // here
         setFloatingElemPositionForLinkEditor(domRect, editorElem, anchorElem);
       }
       setLastSelection(selection);
@@ -215,7 +216,7 @@ function FloatingLinkEditor({
       ref={editorRef}
       className="absolute top-0 left-0 w-full max-w-sm rounded-md opacity-0 shadow-md">
       {!isLink ? null : isLinkEditMode ? (
-        <div className="flex items-center space-x-2 rounded-md border p-1 pl-2">
+        <div className="ml-2.5 flex items-center space-x-2 rounded-md border">
           <Input
             ref={inputRef}
             value={editedLinkUrl}
@@ -224,6 +225,7 @@ function FloatingLinkEditor({
             className="grow"
           />
           <Button
+            type="button"
             size="icon"
             variant="ghost"
             onClick={() => {
@@ -234,6 +236,7 @@ function FloatingLinkEditor({
             <X className="h-4 w-4" />
           </Button>
           <Button
+            type="button"
             size="icon"
             onClick={handleLinkSubmission}
             className="shrink-0">
@@ -241,16 +244,11 @@ function FloatingLinkEditor({
           </Button>
         </div>
       ) : (
-        <div className="flex items-center justify-between rounded-md border p-1 pl-2">
-          <a
-            href={sanitizeUrl(linkUrl)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="overflow-hidden text-sm text-ellipsis whitespace-nowrap">
-            {linkUrl}
-          </a>
+        <div className="ml-2.5 flex items-center justify-between rounded-md border p-1 pl-2">
+          <span className="block truncate text-sm select-none">{linkUrl}</span>
           <div className="flex">
             <Button
+              type="button"
               size="icon"
               variant="ghost"
               onClick={() => {
@@ -260,8 +258,9 @@ function FloatingLinkEditor({
               <Pencil className="h-4 w-4" />
             </Button>
             <Button
+              type="button"
               size="icon"
-              variant="destructive"
+              variant="ghost"
               onClick={() => {
                 editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
               }}>

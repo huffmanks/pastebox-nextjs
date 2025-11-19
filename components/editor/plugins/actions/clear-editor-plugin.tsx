@@ -27,8 +27,8 @@ export function ClearEditorActionPlugin() {
           <DialogTrigger asChild>
             <Button
               type="button"
-              size={"sm"}
-              variant={"ghost"}
+              size="sm"
+              variant="ghost"
               className="cursor-pointer p-2">
               <Trash2Icon className="h-4 w-4" />
             </Button>
@@ -44,11 +44,16 @@ export function ClearEditorActionPlugin() {
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button
+              type="button"
+              variant="outline">
+              Cancel
+            </Button>
           </DialogClose>
 
           <DialogClose asChild>
             <Button
+              type="button"
               variant="destructive"
               onClick={() => {
                 editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
