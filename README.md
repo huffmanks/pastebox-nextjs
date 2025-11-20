@@ -1,34 +1,56 @@
 # pastebox
 
-A lightweight, self-hostable alternative to Pastebin for sharing text and files on your local network. Perfect for quick file transfers and text sharing between devices without leaving your network.
+A lightweight, self-hosted tool for ephemeral rich text and file sharing on your local network. Designed as a quick digital “drop zone” rather than permanent storage, which prioritizes fast transfers between your devices.
 
 ## Features
 
-- **Simple & Fast** - Clean interface, instant sharing
-- **Text Sharing** - Share code snippets, notes and text
-- **File Uploads** - Share any file type
-- **Temporary Storage** - All pastes expire after 24 hours
-- **Self-Hosted** - Keep your data on your network
-- **Docker Ready** - Easy deployment with Docker
+- Clean, fast interface.
+- Supports rich text and file uploads.
+- 24-hour automatic expiration, with flexibility to extend.
+- Self-hosted and accessible to any device on your local network.
+- Easy Docker deployment.
 
-## Quick Start
+## Usage
 
-### Self-host with Docker
+### docker-compose.yml
 
-#### Clone repo
+```yaml
+services:
+  pastebox:
+    image: huffmanks/pastebox
+    container_name: pastebox
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads:/app/uploads
+      - data:/app/data
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
+    restart: unless-stopped
 
-```sh
-git clone https://github.com/huffmanks/pastebox.git && cd pastebox
+volumes:
+  uploads:
+  data:
 ```
 
-#### Build Docker image
+### .env
 
-```sh
-pnpm docker:prod:build
+```txt
+NODE_ENV=production
+DATABASE_URL=file:./data/prod.db
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-#### Run Docker container
+## Start container
 
 ```sh
-pnpm docker:prod:up
+docker compose up -d
+```
+
+## Open web UI
+
+```sh
+open http://localhost:3000
 ```
